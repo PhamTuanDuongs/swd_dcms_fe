@@ -1,0 +1,9 @@
+.Tabroot {
+    text-align: left;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px; /* Need a specific value to work */
+    height: 300px;
+}
