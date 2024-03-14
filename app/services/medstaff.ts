@@ -17,14 +17,13 @@ export async function getEmployeesById(id: any, context: AppLoadContext) {
         .json();
 }
 
-export const updateMedStaff = async (context: AppLoadContext, medstaff: MedstaffMetadata) => {
+export const updateMedStaff = async (context: AppLoadContext, info: any) => {
     try {
         const res = await api(context)
             .post("admin/employee/update", {
-                json: medstaff,
+                json: info,
             })
-            .text();
-
+            .json();
         return res;
     } catch (error) {
         throw error;

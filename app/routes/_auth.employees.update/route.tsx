@@ -11,70 +11,49 @@ import React from "react";
 import { requireAdmin } from "~/utils/function/UserUtils";
 
 export async function loader({ context, request }: LoaderArgs) {
-    await requireAdmin(request);
+    // await requireAdmin(request);
     const url = new URL(request.url);
     const id = url.searchParams.get("id");
     try {
         const medstaff = await getEmployeesById(id, context);
-        const role = await getAllRoleEmployee(context);
+        // const role = await getAllRoleEmployee(context);
         if (medstaff == undefined) throw new Response("Metadata not found", { status: 403, statusText: "Internal server error" });
-        return json({
-            medstaff,
-            role,
-        });
+        return json(medstaff);
     } catch (error) {
+        console.log(error)
         throw new Response("Internal server error", { status: 500, statusText: "Internal server error" });
     }
 }
 
-const ZUserMetadata = zfd.formData({
-    name: zfd.text(
-        z
-            .string()
-            .nonempty()
-            .max(62)
-            .regex(/^[a-zA-ZÀ-ỹ\s]+$/)
-    ),
-    dob: zfd.text(z.coerce.date().max(new Date())),
-    address: zfd.text(z.string().nonempty().max(126)),
-    phoneNo: zfd.text(z.string().nonempty().max(30).regex(/^\d+$/)),
-    gender: zfd.text().transform((val) => val == "true"),
-    nationalId: zfd.text(z.string().nonempty().max(30).regex(/^\d+$/)),
-    roleId: zfd.text(z.string().nonempty()),
-    qualification: zfd.text(z.string().nonempty()),
-    experience: zfd.text(z.string().nonempty()),
-    oldNationalId: zfd.text(z.string().nonempty()),
-});
 
 export const action: ActionFunction = async ({ context, request }) => {
     const url = new URL(request.url);
     const id = url.searchParams.get("id") as string;
+    const formData = await request.formData();
+    const name = await formData.get("name")
+    const dob = await formData.get("dob")
+    const nationalId = await formData.get("nationalId")
+    const gender = await formData.get("gender")
+    const address = await formData.get("address")
+    const quanlification = await formData.get("quanlification")
+    const experience = await formData.get("experience")
+
+    const medstaff = {
+        id: id,
+        quanlification: quanlification,
+        experience: experience,
+        user: {
+            name: name,
+            dob: dob,
+            nationalId: nationalId,
+            gender: gender,
+            address: address,
+        },
+    }
+
     try {
-        const userMetadata = ZUserMetadata.parse(await request.formData());
-        const { name, dob, address, phoneNo, gender, nationalId, roleId, qualification, experience, oldNationalId } = userMetadata;
-        const medstaffInfo = {
-            userDTO: {
-                id: parseInt(id) as number,
-                role: {
-                    id: roleId,
-                },
-                metadata: {
-                    name,
-                    dob,
-                    address,
-                    phoneNo,
-                    gender,
-                    nationalId,
-                },
-            },
-            qualification,
-            experience,
-        };
-        const nationalIdExists = await getUserByNationalID(context, nationalId);
-        if (nationalIdExists && oldNationalId != nationalId) {
-            return json({ status: 400, message: "This identification number has exited!" });
-        }
-        await updateMedStaff(context, medstaffInfo);
+
+        await updateMedStaff(context, medstaff);
         return json({
             message: "Update successfully",
         });
@@ -101,8 +80,6 @@ export const meta: V2_MetaFunction = () => {
 
 export default function Update() {
     const data = useLoaderData<typeof loader>();
-    const roles = data.role as Role[];
-    const medstaff = data.medstaff as MedstaffMetadata;
     const status = useActionData<typeof action>();
     const [open, setOpen] = React.useState(false);
     const eventDateRef = React.useRef(new Date());
@@ -135,7 +112,7 @@ export default function Update() {
 
     return (
         <div>
-            {data && <UpdateEmployee medstaff={medstaff} listRole={roles} data={status as any} />}
+            {data && <UpdateEmployee medstaff={data} />}
             <Toast.Provider swipeDirection="right">
                 <Toast.Toast
                     className="bg-white rounded-md shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] p-[15px] grid [grid-template-areas:_'title_action'_'description_action'] grid-cols-[auto_max-content] gap-x-[15px] items-center data-[state=open]:animate-slideIn data-[state=closed]:animate-hide data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=cancel]:translate-x-0 data-[swipe=cancel]:transition-[transform_200ms_ease-out] data-[swipe=end]:animate-swipeOut"
