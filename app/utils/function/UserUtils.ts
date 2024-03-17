@@ -2,6 +2,9 @@ import { redirect } from "@remix-run/cloudflare";
 import ky from "ky";
 
 import { userCookie } from "./UserCookie";
+
+import { User } from "~/types";
+
 export async function GetUserToken({ email, password }: any) {
     const user = { email: email, password: password };
     const jsonData = await ky
@@ -9,36 +12,33 @@ export async function GetUserToken({ email, password }: any) {
             json: user,
         })
         .text();
+
     return jsonData;
 }
 
-export async function GetCurrentUser(request: Request) {
+export async function GetCurrentUser(request: Request): Promise<User | null> {
     const cookieHeader = request.headers.get("Cookie");
-    const token = (await userCookie.parse(cookieHeader)) || "Cookie Error";
-    try {
-        if (token == undefined || token == null) {
-            return null;
-        }
-        const tokens = token.split(".");
-        return JSON.parse(atob(tokens[1])) as UserCookie;
-    } catch (error) {}
-    return null;
+    return userCookie.parse(cookieHeader);
 }
 
 export async function requireUser(request: Request) {
     const user = await GetCurrentUser(request);
-    if (user == null) {
+
+    if (!user) {
         throw redirect("/login");
     }
+
+    return user;
 }
 
 export async function requireAdmin(request: Request) {
-    const user = await GetCurrentUser(request);
-    if (user == null) {
-        throw redirect("/");
-    } else if (user.role.toLocaleLowerCase() !== "admin") {
+    const user = await requireUser(request);
+
+    if (user.role.name.toLocaleLowerCase() !== "admin") {
         throw redirect("/");
     }
+
+    return user;
 }
 
 export interface UserCookie {

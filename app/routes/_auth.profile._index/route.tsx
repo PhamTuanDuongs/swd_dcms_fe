@@ -1,7 +1,7 @@
 import { MetaFunction } from "@remix-run/cloudflare";
 import { Link, useRouteLoaderData } from "@remix-run/react";
 
-import type { Metadata, User } from "~/types";
+import type { Metadata } from "~/types";
 
 export const meta: MetaFunction = () => {
     return [{ title: "Profile" }];
@@ -9,6 +9,7 @@ export const meta: MetaFunction = () => {
 
 export default function ViewProfile() {
     const user = useRouteLoaderData("routes/_auth.profile") as Metadata;
+
     return (
         <div>
             <div className="font-bold text-3xl m-8">Profile</div>
@@ -17,8 +18,8 @@ export default function ViewProfile() {
                 <div className="content-center w-96 h-120 ms-8 bg-indigo-200		  border-2 rounded shadow-xl">
                     <div className="items-center m-8">
                         <div className="flex justify-center">
-                            {user?.metadata?.avatar ? (
-                                <img className="rounded-lg w-40 h-40" src={user?.metadata?.avatar} alt="Avatar" />
+                            {user?.avatar ? (
+                                <img className="rounded-lg w-40 h-40" src={user?.avatar} alt="Avatar" />
                             ) : (
                                 <img
                                     className="rounded-lg w-40 h-40"

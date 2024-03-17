@@ -2,14 +2,16 @@ import type { AppLoadContext } from "@remix-run/cloudflare";
 
 import { api } from "./api";
 
-export async function GetLogin({ email, password }: any, context: AppLoadContext) {
+import { User } from "~/types";
+
+export async function GetLogin({ email, password }: { email: string; password: string }, context: AppLoadContext) {
     const user = { email: email, password: password };
 
     return await api(context)
-        .post("api/login", {
+        .post("api/auth/login", {
             json: user,
         })
-        .text();
+        .json<User>();
 }
 
 export async function RegisterUser(user: any, context: AppLoadContext) {

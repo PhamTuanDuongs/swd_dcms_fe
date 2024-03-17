@@ -41,7 +41,7 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
         });
     }
 
-    const userData = await getMetadata(context, user);
+    const userData = await getMetadata(context, user.id);
 
     return json({
         user: userData,

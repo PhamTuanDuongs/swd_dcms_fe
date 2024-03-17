@@ -4,21 +4,20 @@ import { Outlet } from "@remix-run/react";
 
 import { getMetadata } from "~/services/profile";
 import type { User } from "~/types";
-import { GetCurrentUser, requireUser, UserCookie } from "~/utils/function/UserUtils";
+import { requireUser } from "~/utils/function/UserUtils";
 
 export function shouldRevalidate() {
     return true;
 }
 
 export async function loader({ context, request }: LoaderFunctionArgs) {
-    // await requireUser(request);
-    try {
-        // const userId = (await GetCurrentUser(request)) as UserCookie;
-        const userId = 1;
-        const metadata = await getMetadata(context, userId);
+    const user = await requireUser(request);
 
-        if (metadata == undefined) throw new Response("Metadata not found", { status: 403, statusText: "Internal server error" });
-        console.log(metadata);
+    try {
+        const metadata = await getMetadata(context, user.id);
+
+        if (!metadata) throw new Response("Metadata not found", { status: 403, statusText: "Internal server error" });
+
         return json(metadata);
     } catch (error) {
         throw new Response("Internal server error", { status: 500, statusText: "Internal server error" });

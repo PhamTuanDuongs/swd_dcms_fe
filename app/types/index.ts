@@ -5,9 +5,13 @@ export interface User {
     id: number;
     email: string;
     createdAt: string;
+    verifiedAt: string;
+    resetPasswordToken?: string;
+
     metadata: Metadata;
     role: Role;
 }
+
 export interface UserMetadata {
     email: string;
     metadata: Metadata;
@@ -21,10 +25,13 @@ export interface Metadata {
     gender: boolean;
     nationalId: string;
     avatar?: string;
+    email: string;
+    roleName: string;
+    createdAt: string;
 }
 
 export interface Role {
-    id?: number;
+    id: number;
     name: string;
 }
 
