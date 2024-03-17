@@ -5,10 +5,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, Link, useSubmit } from "@remix-run/react";
 import { z } from "zod";
 
-import type { User } from "~/types";
+import type { Metadata, User } from "~/types";
 
 interface PropsType {
-    user: User;
+    user: Metadata;
     data: any;
 }
 
@@ -40,7 +40,7 @@ const ZuserInput = z.object({
 type UserInput = z.infer<typeof ZuserInput>;
 
 export default function UpdateProfile({ user, data }: PropsType) {
-    const [gender, setGender] = useState(user.metadata.gender);
+    const [gender, setGender] = useState(user.gender);
     const inputFileref = useRef<HTMLInputElement>(null);
     const [selectedFile, setSelectedFile] = useState(false);
 
@@ -125,7 +125,7 @@ export default function UpdateProfile({ user, data }: PropsType) {
                                     className="text-violet11 shadow-violet7 focus:shadow-violet8 inline-flex h-[35px] w-full flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px]"
                                     id="id"
                                     type="hidden"
-                                    defaultValue={user.metadata.id}
+                                    defaultValue={user.id}
                                     name="id"
                                 />
                             </div>
@@ -170,7 +170,7 @@ export default function UpdateProfile({ user, data }: PropsType) {
                                         <input
                                             className="text-violet11 shadow-violet7 focus:shadow-violet8 inline-flex h-[35px] w-80 flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px]"
                                             id="name"
-                                            defaultValue={user.metadata.name}
+                                            defaultValue={user.name}
                                             {...register("name", { required: true })}
                                         />
                                     </fieldset>
@@ -187,7 +187,7 @@ export default function UpdateProfile({ user, data }: PropsType) {
                                             className="text-violet11 shadow-violet7 focus:shadow-violet8 inline-flex h-[35px] w-80 flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px]"
                                             id="dob"
                                             type="date"
-                                            defaultValue={user.metadata.dob}
+                                            defaultValue={user.dob}
                                             {...register("dob")}
                                             name="dob"
                                         />
@@ -204,14 +204,14 @@ export default function UpdateProfile({ user, data }: PropsType) {
                                         <input
                                             className="text-violet11 shadow-violet7 focus:shadow-violet8 inline-flex h-[35px] w-80 flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px]"
                                             id="nationalId"
-                                            defaultValue={user.metadata.nationalId}
+                                            defaultValue={user.nationalId}
                                             {...register("nationalId")}
                                             name="nationalId"
                                         />
                                         <input
                                             type="hidden"
                                             id="oldNationalId"
-                                            defaultValue={user.metadata.nationalId}
+                                            defaultValue={user.nationalId}
                                             {...register("oldNationalId")}
                                             name="oldNationalId"
                                         />
@@ -283,7 +283,7 @@ export default function UpdateProfile({ user, data }: PropsType) {
                                         <input
                                             className="text-violet11 shadow-violet7 focus:shadow-violet8 inline-flex h-[35px] w-80 flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px]"
                                             id="phone"
-                                            defaultValue={user.metadata.phoneNo}
+                                            defaultValue={user.phoneNo}
                                             {...register("phoneNo")}
                                             name="phoneNo"
                                         />
@@ -302,7 +302,7 @@ export default function UpdateProfile({ user, data }: PropsType) {
                                         <input
                                             className="text-violet11 shadow-violet7 focus:shadow-violet8 inline-flex h-[35px] w-80 flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px]"
                                             id="address"
-                                            defaultValue={user.metadata.address}
+                                            defaultValue={user.address}
                                             {...register("address")}
                                             name="address"
                                         />

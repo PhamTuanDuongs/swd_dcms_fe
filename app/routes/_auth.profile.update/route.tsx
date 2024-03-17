@@ -22,7 +22,7 @@ import UpdateProfile from "./updateComponent";
 import { uploadImg } from "~/services/image";
 import { getUserByNationalID } from "~/services/medstaff";
 import { updateAvatar, updateMetadata } from "~/services/profile";
-import { Avatar, User, UserMetadata } from "~/types";
+import { Avatar, Metadata, User, UserMetadata } from "~/types";
 import { GetCurrentUser, requireAdmin, requireUser, UserCookie } from "~/utils/function/UserUtils";
 
 export const meta: MetaFunction = () => {
@@ -55,7 +55,6 @@ const ZUserMetadata = zfd.formData({
 });
 
 export const shouldValidate: ShouldRevalidateFunction = ({ actionResult, currentUrl, defaultShouldRevalidate }) => {
-    //  @ts-ignore
     return true;
     if (actionResult?.message == "Update successful") return true;
 
@@ -95,13 +94,14 @@ const uploadHandler = (context: AppLoadContext) =>
     );
 
 export async function action({ request, context }: ActionFunctionArgs) {
-    await requireUser(request);
-    const userCookie = (await GetCurrentUser(request)) as UserCookie;
+    // await requireUser(request);
+    // const userCookie = (await GetCurrentUser(request)) as UserCookie;
     try {
         if (request.headers.get("content-type")?.includes("multipart/form-data")) {
             const formData = await unstable_parseMultipartFormData(request, uploadHandler(context));
             const url = formData.get("avatar");
-            const id = userCookie.sub;
+            // const id = userCookie.sub;
+            const id = 1;
             const avatarUrl = {
                 id,
                 url,
@@ -114,6 +114,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
             const userMetadata = ZUserMetadata.parse(await request.formData());
 
             const { name, dob, nationalId, gender, address, phoneNo, oldNationalId } = userMetadata;
+            console.log(userMetadata);
 
             const profileInfo = {
                 email: "",
@@ -131,7 +132,9 @@ export async function action({ request, context }: ActionFunctionArgs) {
             if (nationalIdExists && oldNationalId !== nationalId) {
                 return json({ status: 400, message: "This identification number has exited!" });
             }
-            await updateMetadata(context, profileInfo, userCookie);
+            console.log(profileInfo);
+            // await updateMetadata(context, profileInfo, userCookie);
+            await updateMetadata(context, profileInfo, 1);
             return json({
                 message: "Update successfully",
             });
@@ -190,7 +193,7 @@ export default function Update() {
 
     return (
         <div>
-            <div>{user && <UpdateProfile user={user as User} data={data as any} />}</div>
+            <div>{user && <UpdateProfile user={user as Metadata} data={data as any} />}</div>
             <Toast.Provider swipeDirection="right">
                 <Toast.Toast
                     className="bg-white rounded-md shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] p-[15px] grid [grid-template-areas:_'title_action'_'description_action'] grid-cols-[auto_max-content] gap-x-[15px] items-center data-[state=open]:animate-slideIn data-[state=closed]:animate-hide data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=cancel]:translate-x-0 data-[swipe=cancel]:transition-[transform_200ms_ease-out] data-[swipe=end]:animate-swipeOut"
