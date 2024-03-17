@@ -11,6 +11,7 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
     const id = url.searchParams.get("id");
     try {
         const medstaff = await getEmployeesById(id, context);
+        console.log(medstaff);
         return json(medstaff);
     } catch (error) {
         throw new Response("Internal server error", { status: 500, statusText: "Internal server error" });
@@ -23,7 +24,7 @@ export const meta: MetaFunction = () => {
 
 export default function View() {
     const data = useLoaderData<typeof loader>() as any;
-
+    console.log(data);
     // const arrQualification = data.qualification.split(".");
     // const arrExperience = data.experience.split(".");
     return (
@@ -36,31 +37,31 @@ export default function View() {
                         <div className="mt-6">
                             <dl>
                                 <dt>Name</dt>
-                                <dd className="font-bold"> {data.user?.name}</dd>
+                                <dd className="font-bold"> {data.name}</dd>
                             </dl>
                         </div>
                         <div className="mt-6">
                             <dl>
                                 <dt>Address</dt>
-                                <dd className="font-bold"> {data.user?.address}</dd>
+                                <dd className="font-bold"> {data.address}</dd>
                             </dl>
                         </div>
                         <div className="mt-6">
                             <dl>
                                 <dt>Identification Number</dt>
-                                <dd className="font-bold"> {data.user?.nationalId}</dd>
+                                <dd className="font-bold"> {data.nationalId}</dd>
                             </dl>
                         </div>
                         <div className="mt-6">
                             <dl>
                                 <dt>Email address</dt>
-                                <dd className="font-bold"> {data.user?.userAccounts?.email}</dd>
+                                <dd className="font-bold"> {data.email}</dd>
                             </dl>
                         </div>
                         <div className="mt-6">
                             <dl>
                                 <dt>Phone number</dt>
-                                <dd className="font-bold">{data.user?.phoneNo}</dd>
+                                <dd className="font-bold">{data.phoneNo}</dd>
                             </dl>
                         </div>
                     </div>
@@ -72,25 +73,25 @@ export default function View() {
                             <div className="dob mt-6">
                                 <dl>
                                     <dt>Birthday</dt>
-                                    <dd className="font-bold">{data.user?.dob}</dd>
+                                    <dd className="font-bold">{data.dob}</dd>
                                 </dl>
                             </div>
                             <div className="role mt-6">
                                 <dl>
                                     <dt>Role</dt>
-                                    {/* <dd className="font-bold">{data.userDTO.role.name}</dd> */}
+                                    <dd className="font-bold">{data.roleName}</dd>
                                 </dl>
                             </div>
                             <div className="gender mt-6">
                                 <dl>
                                     <dt>Gender</dt>
-                                    <dd className="font-bold">{data.user?.gender == true ? "male" : "female"}</dd>
+                                    <dd className="font-bold">{data.gender == true ? "male" : "female"}</dd>
                                 </dl>
                             </div>
                             <div className="national mt-6">
                                 <dl>
                                     <dt>Join Date</dt>
-                                    {/* <dd className="font-bold">{data.userDTO.createdAt}</dd> */}
+                                    <dd className="font-bold">{data.createdAt}</dd>
                                 </dl>
                             </div>
                         </div>

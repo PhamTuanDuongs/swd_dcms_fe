@@ -6,7 +6,7 @@ interface PropsType {
 }
 
 export default function UpdateEmployee({ medstaff }: PropsType) {
-    const [gender, setGender] = useState(medstaff?.user?.gender);
+    const [gender, setGender] = useState(medstaff?.gender);
     // const [checkRole, setRole] = useState(medstaff.userDTO.role.id);
     const handleGenderChange = (e: any) => {
         const newGender = e.target.value === "true";
@@ -36,7 +36,7 @@ export default function UpdateEmployee({ medstaff }: PropsType) {
                                             className="text-violet11 shadow-violet7 focus:shadow-violet8 inline-flex h-[35px] w-full flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px]"
                                             id="name"
                                             name="name"
-                                            defaultValue={medstaff.user?.name}
+                                            defaultValue={medstaff?.name}
                                         />
                                     </fieldset>
                                 </div>
@@ -51,7 +51,7 @@ export default function UpdateEmployee({ medstaff }: PropsType) {
                                             className="text-violet11 shadow-violet7 focus:shadow-violet8 inline-flex h-[35px] w-full flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px]"
                                             id="dob"
                                             type="date"
-                                            defaultValue={medstaff.user?.dob}
+                                            defaultValue={medstaff?.dob}
                                             name="dob"
                                         />
                                     </fieldset>
@@ -66,7 +66,7 @@ export default function UpdateEmployee({ medstaff }: PropsType) {
                                         <input
                                             className="text-violet11 shadow-violet7 focus:shadow-violet8 inline-flex h-[35px] w-full flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px]"
                                             id="nationalId"
-                                            defaultValue={medstaff.user?.nationalId}
+                                            defaultValue={medstaff?.nationalId}
                                             name="nationalId"
                                         />
                                     </fieldset>
@@ -85,8 +85,8 @@ export default function UpdateEmployee({ medstaff }: PropsType) {
                                                     type="radio"
                                                     value="false"
                                                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                                                    // checked={gender === false}
-                                                    // onChange={handleGenderChange}
+                                                    checked={gender === false}
+                                                    onChange={handleGenderChange}
                                                     name="gender"
                                                 />
                                                 <label
@@ -129,7 +129,7 @@ export default function UpdateEmployee({ medstaff }: PropsType) {
                                         <input
                                             className="text-violet11 shadow-violet7 focus:shadow-violet8 inline-flex h-[35px] w-full flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px]"
                                             id="phone"
-                                            defaultValue={medstaff.user?.phoneNo}
+                                            defaultValue={medstaff?.phoneNo}
                                             name="phoneNo"
                                         />
                                     </fieldset>
@@ -144,7 +144,7 @@ export default function UpdateEmployee({ medstaff }: PropsType) {
                                         <input
                                             className="text-violet11 shadow-violet7 focus:shadow-violet8 inline-flex h-[35px] w-full flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px]"
                                             id="address"
-                                            defaultValue={medstaff.user?.address}
+                                            defaultValue={medstaff?.address}
                                             name="address"
                                         />
                                     </fieldset>

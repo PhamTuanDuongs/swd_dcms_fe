@@ -36,6 +36,7 @@ export const action: ActionFunction = async ({ context, request }) => {
     const nationalId = await formData.get("nationalId");
     const gender = await formData.get("gender");
     const address = await formData.get("address");
+    const phoneNo = await formData.get("phoneNo");
     const quanlification = await formData.get("quanlification");
     const experience = await formData.get("experience");
 
@@ -49,6 +50,7 @@ export const action: ActionFunction = async ({ context, request }) => {
             nationalId: nationalId,
             gender: gender,
             address: address,
+            phoneNo: phoneNo,
         },
     };
 
@@ -69,7 +71,7 @@ export const action: ActionFunction = async ({ context, request }) => {
             },
             {
                 status: 400,
-            },
+            }
         );
     }
 };
