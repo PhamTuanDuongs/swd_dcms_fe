@@ -19,6 +19,8 @@ export async function action({ request, context }: ActionFunctionArgs) {
 
         return json({ status: "200", message: "Login succesfully" }, { headers: { "Set-Cookie": await userCookie.serialize(jsonData) } });
     } catch (error: any) {
+        console.log(error);
+
         const status = error?.response?.status;
         if (error instanceof z.ZodError) {
             return json({ status: "validate", message: error.issues });

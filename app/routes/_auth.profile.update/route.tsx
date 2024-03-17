@@ -44,7 +44,7 @@ const ZUserMetadata = zfd.formData({
             .string()
             .nonempty()
             .max(62)
-            .regex(/^[a-zA-ZÀ-ỹ\s]+$/),
+            .regex(/^[a-zA-ZÀ-ỹ\s]+$/)
     ),
     dob: zfd.text(z.coerce.date().max(new Date())),
     address: zfd.text(z.string().trim().nonempty().max(126)),
@@ -88,10 +88,10 @@ const uploadHandler = (context: AppLoadContext) =>
             const key = Math.random().toString(36).substring(2, 15);
             await uploadImg(key, context, img, contentType);
 
-            return `${context.R2_URL}/${key}`;
+            return `${context.cloudflare.env.R2_URL}/${key}`;
         },
         // fallback to memory for everything else
-        unstable_createMemoryUploadHandler(),
+        unstable_createMemoryUploadHandler()
     );
 
 export async function action({ request, context }: ActionFunctionArgs) {
@@ -150,7 +150,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
                 },
                 {
                     status: 400,
-                },
+                }
             );
     }
 }

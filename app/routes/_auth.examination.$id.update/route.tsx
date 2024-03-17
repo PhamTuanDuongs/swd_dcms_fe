@@ -51,7 +51,7 @@ const uploadHandler = (context: AppLoadContext) =>
             const key = Math.random().toString(36).substring(2, 15);
             await uploadImg(key, context, img, contentType);
 
-            return `${context.R2_URL}/${key}`;
+            return `${context.cloudflare.env.R2_URL}/${key}`;
         },
         // fallback to memory for everything else
         unstable_createMemoryUploadHandler()
