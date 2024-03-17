@@ -11,14 +11,14 @@ export function shouldRevalidate() {
 }
 
 export async function loader({ context, request }: LoaderFunctionArgs) {
-    await requireUser(request);
+    // await requireUser(request);
     try {
-        const userId = (await GetCurrentUser(request)) as UserCookie;
-
+        // const userId = (await GetCurrentUser(request)) as UserCookie;
+        const userId = 1;
         const metadata = await getMetadata(context, userId);
 
         if (metadata == undefined) throw new Response("Metadata not found", { status: 403, statusText: "Internal server error" });
-
+        console.log(metadata);
         return json(metadata);
     } catch (error) {
         throw new Response("Internal server error", { status: 500, statusText: "Internal server error" });
