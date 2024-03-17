@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { type ActionFunctionArgs, json, redirect } from "@remix-run/cloudflare";
-import { useActionData, useLoaderData, useNavigate } from "@remix-run/react";
+import { useActionData, useNavigate } from "@remix-run/react";
 import { HTTPError } from "ky";
 import { z } from "zod";
 
@@ -49,7 +49,14 @@ export async function loader({ request }: ActionFunctionArgs) {
 }
 
 export default function Login() {
+    const navigate = useNavigate();
     const data = useActionData<typeof action>();
+
+    useEffect(() => {
+        if (data?.status == "200") {
+            navigate("/appointment");
+        }
+    }, [data, navigate]);
 
     return (
         <div className="login-container">
