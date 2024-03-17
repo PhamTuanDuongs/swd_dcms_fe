@@ -10,7 +10,7 @@ export async function getMetadata(context: AppLoadContext, userId: number) {
         .json<Metadata>();
 }
 
-export const updateMetadata = async (context: AppLoadContext, user: UserMetadata, userId: number) => {
+export const updateMetadata = async (context: AppLoadContext, user: Metadata) => {
     const res = await api(context)
         .post("api/user/update", {
             json: user,

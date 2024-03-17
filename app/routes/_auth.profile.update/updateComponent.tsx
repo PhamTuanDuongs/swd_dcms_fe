@@ -34,7 +34,6 @@ const ZuserInput = z.object({
         .nonempty({ message: "The national ID cannot be empty." })
         .max(12, { message: "The national ID cannot have more than 12 characters." })
         .regex(/^\d+$/, { message: "Invalid national ID!" }),
-    oldNationalId: z.string(),
 });
 
 type UserInput = z.infer<typeof ZuserInput>;

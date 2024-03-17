@@ -51,7 +51,6 @@ const ZUserMetadata = zfd.formData({
     phoneNo: zfd.text(z.string().nonempty().max(30).regex(/^\d+$/)),
     gender: zfd.text().transform((val) => val == "true"),
     nationalId: zfd.text(z.string().nonempty().max(30).regex(/^\d+$/)),
-    oldNationalId: zfd.text(z.string().nonempty()),
 });
 
 export const shouldValidate: ShouldRevalidateFunction = ({ actionResult, currentUrl, defaultShouldRevalidate }) => {
@@ -94,8 +93,8 @@ const uploadHandler = (context: AppLoadContext) =>
     );
 
 export async function action({ request, context }: ActionFunctionArgs) {
-    // await requireUser(request);
-    // const userCookie = (await GetCurrentUser(request)) as UserCookie;
+    await requireUser(request);
+    const userCookie = await GetCurrentUser(request);
     try {
         if (request.headers.get("content-type")?.includes("multipart/form-data")) {
             const formData = await unstable_parseMultipartFormData(request, uploadHandler(context));
@@ -113,28 +112,15 @@ export async function action({ request, context }: ActionFunctionArgs) {
         } else {
             const userMetadata = ZUserMetadata.parse(await request.formData());
 
-            const { name, dob, nationalId, gender, address, phoneNo, oldNationalId } = userMetadata;
+            const { nationalId } = userMetadata;
             console.log(userMetadata);
-
             const profileInfo = {
-                email: "",
-                metadata: {
-                    name,
-                    dob,
-                    address,
-                    phoneNo,
-                    gender,
-                    nationalId,
-                },
+                id: userCookie?.id,
+                ...userMetadata,
             };
 
-            const nationalIdExists = await getUserByNationalID(context, nationalId);
-            if (nationalIdExists && oldNationalId !== nationalId) {
-                return json({ status: 400, message: "This identification number has exited!" });
-            }
-            console.log(profileInfo);
             // await updateMetadata(context, profileInfo, userCookie);
-            await updateMetadata(context, profileInfo, 1);
+            await updateMetadata(context, profileInfo);
             return json({
                 message: "Update successfully",
             });
