@@ -1,14 +1,16 @@
-import { ActionArgs, ActionFunction, LoaderArgs, V2_MetaFunction, json } from "@remix-run/cloudflare";
 import React from "react";
-import { requireAdmin } from "~/utils/function/UserUtils";
-import UpdatePatient from "./update";
-import { getPatientById, updatePatient } from "~/services/patient";
-import { useActionData, useLoaderData, useNavigate, useRouteLoaderData } from "@remix-run/react";
-import { zfd } from "zod-form-data";
 import * as Toast from "@radix-ui/react-toast";
+import { ActionFunction, json, LoaderFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
+import { useActionData, useLoaderData, useNavigate } from "@remix-run/react";
 import { z } from "zod";
-import { Metadata } from "~/types";
+import { zfd } from "zod-form-data";
+
+import UpdatePatient from "./update";
+
 import { getUserByNationalID } from "~/services/medstaff";
+import { getPatientById, updatePatient } from "~/services/patient";
+import { Metadata } from "~/types";
+import { requireAdmin } from "~/utils/function/UserUtils";
 
 const ZUserMetadata = zfd.formData({
     name: zfd.text(
@@ -26,9 +28,7 @@ const ZUserMetadata = zfd.formData({
     oldNationalId: zfd.text(z.string().nonempty()),
 });
 
-
-
-export async function loader({ context, request,params }: LoaderArgs) {
+export async function loader({ context, request, params }: LoaderFunctionArgs) {
     await requireAdmin(request);
     const id = params?.id;
 
@@ -36,14 +36,14 @@ export async function loader({ context, request,params }: LoaderArgs) {
         const patient = await getPatientById(id, context);
         if (patient == undefined) throw new Response("Patient not found", { status: 403, statusText: "Internal server error" });
         return json({
-            patient
+            patient,
         });
     } catch (error) {
         throw new Response("Internal server error", { status: 500, statusText: "Internal server error" });
     }
 }
 
-export const action: ActionFunction = async ({ context, request,params }) => {
+export const action: ActionFunction = async ({ context, request, params }) => {
     const id = params?.id;
 
     try {
@@ -83,7 +83,7 @@ export const action: ActionFunction = async ({ context, request,params }) => {
     }
 };
 
-export const meta: V2_MetaFunction = () => {
+export const meta: MetaFunction = () => {
     return [{ title: "Edit Patient" }];
 };
 

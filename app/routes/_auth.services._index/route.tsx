@@ -1,17 +1,17 @@
-import type { ActionArgs, LoaderArgs } from "@remix-run/cloudflare";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
-import { deteleServiceById, findAllUndeletedServicesByName } from "~/services/service";
-import { useActionData, useLoaderData, Form, useNavigate } from "@remix-run/react";
+import { Form, useActionData, useLoaderData, useNavigate } from "@remix-run/react";
+import { Pagination } from "flowbite-react";
+import { HTTPError } from "ky";
 
+import { AddServiceDrawer } from "./AddServiceDrawer";
 import { ServiceTable } from "./ServiceTable";
 import { ToastMessage } from "./Toast";
 
+import { deteleServiceById, findAllUndeletedServicesByName } from "~/services/service";
 import { requireAdmin } from "~/utils/function/UserUtils";
-import { HTTPError } from "ky-universal";
-import { Pagination } from "flowbite-react";
-import { AddServiceDrawer } from "./AddServiceDrawer";
 
-export async function loader({ context, request }: LoaderArgs) {
+export async function loader({ context, request }: LoaderFunctionArgs) {
     await requireAdmin(request);
 
     const url = new URL(request.url);
@@ -40,7 +40,7 @@ export async function loader({ context, request }: LoaderArgs) {
                 JSON.stringify({
                     error: error?.message,
                 }),
-                { status: error?.response?.status ?? 500 }
+                { status: error?.response?.status ?? 500 },
             );
         }
 
@@ -48,12 +48,12 @@ export async function loader({ context, request }: LoaderArgs) {
             JSON.stringify({
                 error: "Unknown error",
             }),
-            { status: 500 }
+            { status: 500 },
         );
     }
 }
 
-export async function action({ request, context }: ActionArgs) {
+export async function action({ request, context }: ActionFunctionArgs) {
     const body = await request.formData();
     const id = body.get("id") as string;
     try {
@@ -68,7 +68,7 @@ export async function action({ request, context }: ActionArgs) {
             },
             {
                 status: 400,
-            }
+            },
         );
     }
 }

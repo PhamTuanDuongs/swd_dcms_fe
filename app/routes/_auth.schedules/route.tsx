@@ -1,18 +1,20 @@
-import { type ActionArgs, json, type LoaderArgs, type V2_MetaFunction } from "@remix-run/cloudflare";
-import { useLoaderData, useNavigate } from "@remix-run/react";
-import { createOrUpdateStaffShift, getWeeklyShifts } from "~/services/shift";
-import { getAllMondayOfYear, getMondayOfWeek } from "~/utils/function/dateUtils";
-import ScheduleTable from "./ScheduleTable";
-import dayjs from "dayjs";
-import { getEmployees } from "~/services/medstaff";
-import { zfd } from "zod-form-data";
-import { z } from "zod";
-import { HTTPError } from "ky-universal";
-import type { MedstaffMetadata } from "~/types";
-import { requireAdmin } from "~/utils/function/UserUtils";
 import { useState } from "react";
+import { type ActionFunctionArgs, json, type LoaderFunctionArgs, type MetaFunction } from "@remix-run/cloudflare";
+import { useLoaderData, useNavigate } from "@remix-run/react";
+import dayjs from "dayjs";
+import { HTTPError } from "ky";
+import { z } from "zod";
+import { zfd } from "zod-form-data";
 
-export const meta: V2_MetaFunction = () => {
+import ScheduleTable from "./ScheduleTable";
+
+import { getEmployees } from "~/services/medstaff";
+import { createOrUpdateStaffShift, getWeeklyShifts } from "~/services/shift";
+import type { MedstaffMetadata } from "~/types";
+import { getAllMondayOfYear, getMondayOfWeek } from "~/utils/function/dateUtils";
+import { requireAdmin } from "~/utils/function/UserUtils";
+
+export const meta: MetaFunction = () => {
     return [
         {
             title: "Schedules - DCMS",
@@ -20,12 +22,12 @@ export const meta: V2_MetaFunction = () => {
     ];
 };
 
-export async function loader({ context, request }: LoaderArgs) {
+export async function loader({ context, request }: LoaderFunctionArgs) {
     try {
         await requireAdmin(request);
 
         const url = new URL(request.url);
-        let startDateParams = url.searchParams.get("startDate");
+        const startDateParams = url.searchParams.get("startDate");
 
         const startDate = startDateParams ? new Date(startDateParams) : new Date();
         const monday = getMondayOfWeek(startDate);
@@ -47,7 +49,7 @@ const ZChangeStaffShift = zfd.formData({
     room: zfd.text(z.string().nonempty()),
 });
 
-export async function action({ request, context }: ActionArgs) {
+export async function action({ request, context }: ActionFunctionArgs) {
     try {
         await requireAdmin(request);
 
@@ -72,7 +74,7 @@ export default function SchedulePage() {
     const [year, setYear] = useState(new Date().getFullYear());
 
     const mondays = getAllMondayOfYear(year).map(
-        (monday) => `${dayjs(monday).format("MM-DD")} to ${dayjs(monday).add(6, "day").format("MM-DD")}`
+        (monday) => `${dayjs(monday).format("MM-DD")} to ${dayjs(monday).add(6, "day").format("MM-DD")}`,
     );
 
     return (

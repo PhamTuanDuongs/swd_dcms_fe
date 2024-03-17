@@ -1,10 +1,12 @@
-import { ActionArgs, json } from "@remix-run/cloudflare";
-import ProcessForget, { ForgetSchema } from "./Forget";
-import { string, z } from "zod";
-import { GetResetPasswordToken } from "~/services/user";
+import { ActionFunctionArgs, json } from "@remix-run/cloudflare";
 import { useActionData } from "@remix-run/react";
+import { z } from "zod";
 
-export async function action({ request, context }: ActionArgs) {
+import ProcessForget, { ForgetSchema } from "./Forget";
+
+import { GetResetPasswordToken } from "~/services/user";
+
+export async function action({ request, context }: ActionFunctionArgs) {
     const body = await request.formData();
     const emailRaw = body.get("email");
     try {

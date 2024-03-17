@@ -1,7 +1,8 @@
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, useNavigation, useSubmit } from "@remix-run/react";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
+
 import Loading from "~/components/loadingspinner";
 
 export const ChangePasswordSchema = z

@@ -2,7 +2,7 @@ import { Appointment } from "./appointment";
 import type { Medstaff } from "./medstaff";
 
 export interface User {
-    id: Number;
+    id: number;
     email: string;
     createdAt: string;
     metadata: Metadata;
@@ -74,5 +74,5 @@ export interface PapeExaminationResponse {
     currentPage: number;
     totalPage: number;
     examinations: Examination[];
-    appointment : Appointment;
+    appointment: Appointment;
 }

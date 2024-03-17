@@ -1,6 +1,8 @@
 import { type AppLoadContext } from "@remix-run/cloudflare";
+
 import { api } from "./api";
-import { PapeExaminationResponse, type PagePatientResponse, Examination } from "~/types";
+
+import { Examination, type PagePatientResponse, PapeExaminationResponse } from "~/types";
 
 export async function getAllExaminationByAppointId(context: AppLoadContext, id: number, pageNo = 1) {
     const res = await api(context)
@@ -14,17 +16,13 @@ export async function getAllExaminationByAppointId(context: AppLoadContext, id: 
 }
 
 export async function AddNewExamination(context: AppLoadContext, examinationDTO: any) {
-    try {
-        const res = await api(context)
-            .post("api/examination/add", {
-                json: examinationDTO,
-            })
-            .text();
+    const res = await api(context)
+        .post("api/examination/add", {
+            json: examinationDTO,
+        })
+        .text();
 
-        return res;
-    } catch (error) {
-        throw error;
-    }
+    return res;
 }
 
 export async function GetExaminationById(context: AppLoadContext, id: number) {
@@ -32,31 +30,22 @@ export async function GetExaminationById(context: AppLoadContext, id: number) {
     return res;
 }
 
-
 export async function UpdateExaminationById(context: AppLoadContext, examinationDTO: any) {
-    try {
-        const res = await api(context)
-            .post("api/examination/update", {
-                json: examinationDTO,
-            })
-            .text();
+    const res = await api(context)
+        .post("api/examination/update", {
+            json: examinationDTO,
+        })
+        .text();
 
-        return res;
-    } catch (error) {
-        throw error;
-    }
+    return res;
 }
 
 export async function UpdateImageExameById(context: AppLoadContext, examinationDTO: any) {
-    try {
-        const res = await api(context)
-            .post("api/examination/update/image", {
-                json: examinationDTO,
-            })
-            .text();
+    const res = await api(context)
+        .post("api/examination/update/image", {
+            json: examinationDTO,
+        })
+        .text();
 
-        return res;
-    } catch (error) {
-        throw error;
-    }
+    return res;
 }

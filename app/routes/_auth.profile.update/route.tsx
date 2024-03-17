@@ -1,28 +1,31 @@
-import {
-    ActionArgs,
-    json,
-    unstable_createMemoryUploadHandler,
-    unstable_parseMultipartFormData,
-    unstable_composeUploadHandlers,
-    AppLoadContext,
-    redirect,
-    V2_MetaFunction,
-} from "@remix-run/cloudflare";
-import { ShouldRevalidateFunction, useActionData, useNavigate, useRouteLoaderData } from "@remix-run/react";
-import ky from "ky-universal";
-import UpdateProfile from "./updateComponent";
 import * as React from "react";
 import * as Toast from "@radix-ui/react-toast";
-import type { ProfileLoaderDataType } from "../_auth.profile/route";
-import { Avatar, User, UserMetadata } from "~/types";
-import { uploadImg } from "~/services/image";
-import { zfd } from "zod-form-data";
+import {
+    ActionFunctionArgs,
+    AppLoadContext,
+    json,
+    MetaFunction,
+    redirect,
+    unstable_composeUploadHandlers,
+    unstable_createMemoryUploadHandler,
+    unstable_parseMultipartFormData,
+} from "@remix-run/cloudflare";
+import { ShouldRevalidateFunction, useActionData, useNavigate, useRouteLoaderData } from "@remix-run/react";
+import ky from "ky";
 import { z } from "zod";
-import { updateAvatar, updateMetadata } from "~/services/profile";
-import { GetCurrentUser, UserCookie, requireAdmin, requireUser } from "~/utils/function/UserUtils";
-import { getUserByNationalID } from "~/services/medstaff";
+import { zfd } from "zod-form-data";
 
-export const meta: V2_MetaFunction = () => {
+import type { ProfileLoaderDataType } from "../_auth.profile/route";
+
+import UpdateProfile from "./updateComponent";
+
+import { uploadImg } from "~/services/image";
+import { getUserByNationalID } from "~/services/medstaff";
+import { updateAvatar, updateMetadata } from "~/services/profile";
+import { Avatar, User, UserMetadata } from "~/types";
+import { GetCurrentUser, requireAdmin, requireUser, UserCookie } from "~/utils/function/UserUtils";
+
+export const meta: MetaFunction = () => {
     return [
         { title: "Edit Profile" },
         {
@@ -41,7 +44,7 @@ const ZUserMetadata = zfd.formData({
             .string()
             .nonempty()
             .max(62)
-            .regex(/^[a-zA-ZÀ-ỹ\s]+$/)
+            .regex(/^[a-zA-ZÀ-ỹ\s]+$/),
     ),
     dob: zfd.text(z.coerce.date().max(new Date())),
     address: zfd.text(z.string().trim().nonempty().max(126)),
@@ -88,10 +91,10 @@ const uploadHandler = (context: AppLoadContext) =>
             return `${context.R2_URL}/${key}`;
         },
         // fallback to memory for everything else
-        unstable_createMemoryUploadHandler()
+        unstable_createMemoryUploadHandler(),
     );
 
-export async function action({ request, context }: ActionArgs) {
+export async function action({ request, context }: ActionFunctionArgs) {
     await requireUser(request);
     const userCookie = (await GetCurrentUser(request)) as UserCookie;
     try {
@@ -110,7 +113,7 @@ export async function action({ request, context }: ActionArgs) {
         } else {
             const userMetadata = ZUserMetadata.parse(await request.formData());
 
-            const { name, dob, nationalId, gender, address, phoneNo,oldNationalId } = userMetadata;
+            const { name, dob, nationalId, gender, address, phoneNo, oldNationalId } = userMetadata;
 
             const profileInfo = {
                 email: "",
@@ -123,6 +126,7 @@ export async function action({ request, context }: ActionArgs) {
                     nationalId,
                 },
             };
+
             const nationalIdExists = await getUserByNationalID(context, nationalId);
             if (nationalIdExists && oldNationalId !== nationalId) {
                 return json({ status: 400, message: "This identification number has exited!" });
@@ -146,7 +150,7 @@ export async function action({ request, context }: ActionArgs) {
                 },
                 {
                     status: 400,
-                }
+                },
             );
     }
 }

@@ -1,15 +1,13 @@
-import { useState } from "react";
-import { Button } from "flowbite-react";
-import { Drawer } from "~/components/Drawer";
-import { useFetcher, useNavigate, useFormAction } from "@remix-run/react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-
-import { useEffect } from "react";
 import { toast } from "react-toastify";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useFetcher, useFormAction, useNavigate } from "@remix-run/react";
+import { Button } from "flowbite-react";
 
 import { ZService } from "../_auth.services.add/route";
+
+import { Drawer } from "~/components/Drawer";
 
 export const AddServiceDrawer = () => {
     const [open, setOpen] = useState(false);

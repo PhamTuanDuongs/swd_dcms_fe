@@ -1,5 +1,6 @@
 import { Link } from "@remix-run/react";
 import { Table } from "flowbite-react";
+
 import { DeleteService } from "./DeleteService";
 
 import type { Service } from "~/types/service";

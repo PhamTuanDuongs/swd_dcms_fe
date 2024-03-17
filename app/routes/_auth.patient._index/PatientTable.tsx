@@ -1,6 +1,6 @@
 import { Link } from "@remix-run/react";
-
 import { Table } from "flowbite-react";
+
 import type { User } from "~/types";
 export const PatientTable = ({ patients, currentPage }: { patients: User[]; currentPage: number }) => {
     return (

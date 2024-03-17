@@ -1,12 +1,14 @@
-import { type ActionArgs, type LoaderArgs, json } from "@remix-run/cloudflare";
+import { type ActionFunctionArgs, json, type LoaderFunctionArgs } from "@remix-run/cloudflare";
+import { useActionData, useLoaderData } from "@remix-run/react";
+import { HTTPError } from "ky";
+
 import AppointmentDetailComponent from "./AppointmentDetailComponent";
-import { ApproveAppointment, CancleAppointment, GetAppointmentDetail } from "~/services/appointment";
-import { GetCurrentUser, requireUser } from "~/utils/function/UserUtils";
-import { HTTPError } from "ky-universal";
-import { useActionData, useLoaderData, Outlet } from "@remix-run/react";
 import { ToastMessage } from "./Toast";
 
-export async function loader({ request, context, params }: LoaderArgs) {
+import { ApproveAppointment, CancleAppointment, GetAppointmentDetail } from "~/services/appointment";
+import { GetCurrentUser, requireUser } from "~/utils/function/UserUtils";
+
+export async function loader({ request, context, params }: LoaderFunctionArgs) {
     await requireUser(request);
     try {
         const user = await GetCurrentUser(request);
@@ -25,7 +27,7 @@ export async function loader({ request, context, params }: LoaderArgs) {
     }
 }
 
-export async function action({ request, context }: ActionArgs) {
+export async function action({ request, context }: ActionFunctionArgs) {
     const body = await request.formData();
     const id = body.get("id") as string;
     if (request.method == "DELETE") {
@@ -71,7 +73,6 @@ export default function AppointmentDetail() {
         <div>
             <AppointmentDetailComponent data={data} user={user} />;
             <ToastMessage status={status} />
-
             {/* <Outlet /> */}
         </div>
     );

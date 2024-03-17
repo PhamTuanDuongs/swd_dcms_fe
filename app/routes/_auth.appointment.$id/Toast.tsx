@@ -1,7 +1,7 @@
 import React from "react";
 import * as Toast from "@radix-ui/react-toast";
 
-export function ToastMessage({status}: any) {
+export function ToastMessage({ status }: any) {
     const [open, setOpen] = React.useState(false);
     const eventDateRef = React.useRef(new Date());
     const timerRef = React.useRef(0);

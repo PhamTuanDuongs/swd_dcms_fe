@@ -1,9 +1,9 @@
-import { NavLink } from "@remix-run/react";
-import { BsJournalMedical } from "react-icons/bs";
-import { BackpackIcon, CalendarIcon } from "@radix-ui/react-icons";
-import { RxPerson } from "react-icons/rx";
-import { RiUserAddLine } from "react-icons/ri";
 import type { ReactNode } from "react";
+import { BsJournalMedical } from "react-icons/bs";
+import { RiUserAddLine } from "react-icons/ri";
+import { RxPerson } from "react-icons/rx";
+import { BackpackIcon, CalendarIcon } from "@radix-ui/react-icons";
+import { NavLink } from "@remix-run/react";
 
 const ROUTES = [
     {

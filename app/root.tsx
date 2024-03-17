@@ -1,20 +1,20 @@
-import { type LoaderArgs, json, type LinksFunction, type V2_MetaFunction } from "@remix-run/cloudflare";
-import { cssBundleHref } from "@remix-run/css-bundle";
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
 import { ToastContainer } from "react-toastify";
+import reactToastifyStyles from "react-toastify/dist/ReactToastify.css?url";
+import { json, LinksFunction, type LoaderFunctionArgs, type MetaFunction } from "@remix-run/cloudflare";
+import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
 
-import "react-toastify/dist/ReactToastify.css";
-
-import styles from "./root.css";
-import { GetCurrentUser } from "./utils/function/UserUtils";
 import { getMetadata } from "./services/profile";
+import { GetCurrentUser } from "./utils/function/UserUtils";
+import rootStyles from "./root.css?url";
 
-export const links: LinksFunction = () => [
-    ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
-    { rel: "stylesheet", href: styles },
-];
+export const links: LinksFunction = () => {
+    return [
+        { rel: "stylesheet", href: rootStyles },
+        { rel: "stylesheet", href: reactToastifyStyles },
+    ];
+};
 
-export const meta: V2_MetaFunction = () => {
+export const meta: MetaFunction = () => {
     return [
         { title: "DCMS" },
         {
@@ -32,7 +32,7 @@ export const meta: V2_MetaFunction = () => {
     ];
 };
 
-export async function loader({ context, request }: LoaderArgs) {
+export async function loader({ context, request }: LoaderFunctionArgs) {
     const user = await GetCurrentUser(request);
 
     if (!user) {
@@ -62,7 +62,6 @@ export default function App() {
                 <Outlet />
                 <ScrollRestoration />
                 <Scripts />
-                <LiveReload />
                 <ToastContainer />
             </body>
         </html>

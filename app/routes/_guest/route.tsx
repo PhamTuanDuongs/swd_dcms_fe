@@ -1,6 +1,6 @@
 import { Outlet } from "@remix-run/react";
 
-import styles from "./authstyle.css";
+import styles from "./authstyle.css?url";
 
 export function links() {
     return [{ rel: "stylesheet", href: styles }];

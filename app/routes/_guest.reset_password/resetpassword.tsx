@@ -1,6 +1,7 @@
 import * as Tabs from "@radix-ui/react-tabs";
 import { Form, Link, useNavigation } from "@remix-run/react";
 import { z } from "zod";
+
 import FormError from "~/components/formerror";
 import Loading from "~/components/loadingspinner";
 
@@ -8,7 +9,7 @@ export const ResetPasswordSchema = z
     .object({
         password: z.string().trim().min(1, { message: "Password has to be filled." }).max(30, "Password must be below 30 character"),
         confirm: z.string().trim().min(1, { message: "Confirm password has to be filled." }).max(30, "Password must be below 30 character"),
-        resetToken: z.string()
+        resetToken: z.string(),
     })
     .refine((data) => data.password === data.confirm, {
         message: "Password and confirm password don't match",

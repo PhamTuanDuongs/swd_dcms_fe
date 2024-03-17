@@ -1,9 +1,5 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, useSubmit } from "@remix-run/react";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import type { MedstaffMetadata, Role } from "~/types";
+import { Form } from "@remix-run/react";
 
 interface PropsType {
     medstaff: any;
@@ -21,16 +17,12 @@ export default function UpdateEmployee({ medstaff }: PropsType) {
     //     setRole(newRole);
     // };
 
-
-
     return (
         <div>
             <div className="font-bold text-3xl m-8 ml-32">Edit Employee</div>
             <div className="flex items-center justify-center mb-20 mt-10">
                 <div className="rigth-content w-4/5 max-h-full border-2 rounded shadow-xl mx-8">
-                    <Form
-                        method="post"
-                    >
+                    <Form method="post">
                         <div className="content m-8 h-1/2">
                             <div className="context grid  grid-cols-2 gap-4">
                                 <div className="dob mt-6">
@@ -47,7 +39,6 @@ export default function UpdateEmployee({ medstaff }: PropsType) {
                                             defaultValue={medstaff.user?.name}
                                         />
                                     </fieldset>
-
                                 </div>
                                 <div className="dob mt-6">
                                     <fieldset className="mb-[15px] w-96 gap-5">
@@ -64,7 +55,6 @@ export default function UpdateEmployee({ medstaff }: PropsType) {
                                             name="dob"
                                         />
                                     </fieldset>
-
                                 </div>
                                 <div className="role mt-6">
                                     <fieldset className="mb-[15px] w-96 gap-5">
@@ -77,13 +67,9 @@ export default function UpdateEmployee({ medstaff }: PropsType) {
                                             className="text-violet11 shadow-violet7 focus:shadow-violet8 inline-flex h-[35px] w-full flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px]"
                                             id="nationalId"
                                             defaultValue={medstaff.user?.nationalId}
-
                                             name="nationalId"
                                         />
-                                       
                                     </fieldset>
-
-
                                 </div>
                                 <div className="gender mt-6 mb-[15px] w-96 gap-5">
                                     <label className="text-violet11 w-[130px] text-right text-[15px] font-bold" htmlFor="nationalId">
@@ -97,7 +83,6 @@ export default function UpdateEmployee({ medstaff }: PropsType) {
                                                 <input
                                                     id="horizontal-list-radio-license"
                                                     type="radio"
-
                                                     value="false"
                                                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                                                     // checked={gender === false}
@@ -118,7 +103,6 @@ export default function UpdateEmployee({ medstaff }: PropsType) {
                                                     id="horizontal-list-radio-id"
                                                     type="radio"
                                                     value="true"
-
                                                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                                                     checked={gender === true}
                                                     onChange={handleGenderChange}
@@ -147,11 +131,8 @@ export default function UpdateEmployee({ medstaff }: PropsType) {
                                             id="phone"
                                             defaultValue={medstaff.user?.phoneNo}
                                             name="phoneNo"
-
-
                                         />
                                     </fieldset>
-
                                 </div>
                                 <div className="address mt-6">
                                     <fieldset className="mb-[15px] w-96 gap-5">
@@ -164,11 +145,9 @@ export default function UpdateEmployee({ medstaff }: PropsType) {
                                             className="text-violet11 shadow-violet7 focus:shadow-violet8 inline-flex h-[35px] w-full flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px]"
                                             id="address"
                                             defaultValue={medstaff.user?.address}
-
                                             name="address"
                                         />
                                     </fieldset>
-
                                 </div>
                                 <div className="address mt-6">
                                     <label className="text-violet11 w-[130px] text-right text-[15px] font-bold" htmlFor="address">
@@ -176,8 +155,6 @@ export default function UpdateEmployee({ medstaff }: PropsType) {
                                         <i className="text-red-600">*</i>
                                     </label>
                                     <br />
-
-
                                 </div>
                             </div>
                             <div className="mt-6">
@@ -194,7 +171,6 @@ export default function UpdateEmployee({ medstaff }: PropsType) {
                                     rows={7}
                                 ></textarea>
                                 <br />
-
                             </div>
                             <div className="mt-6">
                                 <label className="text-violet11 w-[130px] text-right text-[15px] font-bold" htmlFor="experience">
@@ -210,7 +186,6 @@ export default function UpdateEmployee({ medstaff }: PropsType) {
                                     rows={7}
                                 ></textarea>
                                 <br />
-
                             </div>
                             <div className="mt-6 w-96 justify-center">
                                 <button

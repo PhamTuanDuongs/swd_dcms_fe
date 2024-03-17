@@ -1,12 +1,14 @@
-import { ActionArgs, json, redirect } from "@remix-run/cloudflare";
-import ChangePasswordProcess, { ChangePasswordSchema } from "./changePassComponent";
-import { GetCurrentUser, requireUser } from "~/utils/function/UserUtils";
-import { ChangePasswordApi } from "~/services/user";
-import { z } from "zod";
-import ToastDemo from "~/components/toatsdemo";
+import { ActionFunctionArgs, json, redirect } from "@remix-run/cloudflare";
 import { useActionData } from "@remix-run/react";
+import { z } from "zod";
 
-export async function action({ request, context }: ActionArgs) {
+import ChangePasswordProcess, { ChangePasswordSchema } from "./changePassComponent";
+
+import ToastDemo from "~/components/toatsdemo";
+import { ChangePasswordApi } from "~/services/user";
+import { GetCurrentUser, requireUser } from "~/utils/function/UserUtils";
+
+export async function action({ request, context }: ActionFunctionArgs) {
     const body = await request.formData();
     const user = await GetCurrentUser(request);
     const confirm = body.get("confirm");

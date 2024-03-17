@@ -1,11 +1,11 @@
-import * as AlertDialog from "@radix-ui/react-alert-dialog";
-import { Form, useFetcher } from "@remix-run/react";
 import React, { useEffect } from "react";
-import { Rating, ThinStar } from "@smastrom/react-rating";
-import Loading from "~/components/loadingspinner";
-import { CommentComponent } from "./CommentComponent";
-import { number } from "zod";
+import * as AlertDialog from "@radix-ui/react-alert-dialog";
+import { useFetcher } from "@remix-run/react";
 import { Pagination } from "flowbite-react";
+
+import { CommentComponent } from "./CommentComponent";
+
+import Loading from "~/components/loadingspinner";
 
 export function ViewFeedBack({ medstaffId }: { medstaffId: string }) {
     const [open, setOpen] = React.useState(false);
@@ -13,24 +13,13 @@ export function ViewFeedBack({ medstaffId }: { medstaffId: string }) {
     const active = comments.state !== "idle";
     useEffect(() => {
         if (comments.state === "idle" && !comments.data && open == true) {
-
-
-            comments.submit(
-                { some: "values" },
-                { method: "post", action: `/medstaff/${medstaffId}/view` }
-            );
-
-
+            comments.submit({ some: "values" }, { method: "post", action: `/medstaff/${medstaffId}/view` });
         }
-
-    }, [open, comments])
+    }, [open, comments]);
 
     const handleMove = (page: number) => {
-        comments.submit(
-            { some: "values" },
-            { method: "post", action: `/medstaff/${medstaffId}/view?page=${page}` }
-        );
-    }
+        comments.submit({ some: "values" }, { method: "post", action: `/medstaff/${medstaffId}/view?page=${page}` });
+    };
     return (
         <AlertDialog.Root open={open} onOpenChange={setOpen}>
             <AlertDialog.Trigger asChild>
@@ -55,29 +44,35 @@ export function ViewFeedBack({ medstaffId }: { medstaffId: string }) {
                         </AlertDialog.Cancel>
                     </AlertDialog.Title>
                     <div className="text-mauve11 mt-4 mb-5 text-[15px] leading-normal ">
-                        {open ? (comments.data && !active ? comments.data?.feedbacks?.map((f: { comment: string; metadata: any; doctorPoint: number }, index: number) => {
-                            return (<div key={index} >
-                                <CommentComponent comment={f.comment} patient={f.metadata} doctorPoint={f.doctorPoint} />
-
-                            </div>)
-                        }) : <Loading />) : null}
-
-
+                        {open ? (
+                            comments.data && !active ? (
+                                comments.data?.feedbacks?.map(
+                                    (f: { comment: string; metadata: any; doctorPoint: number }, index: number) => {
+                                        return (
+                                            <div key={index}>
+                                                <CommentComponent comment={f.comment} patient={f.metadata} doctorPoint={f.doctorPoint} />
+                                            </div>
+                                        );
+                                    }
+                                )
+                            ) : (
+                                <Loading />
+                            )
+                        ) : null}
                     </div>
                     <nav aria-label="Page navigation example" className="flex justify-center">
-
-                        {comments?.data?.totalPage > 1 && <Pagination
-                            showIcons
-                            currentPage={comments?.data?.currentPage}
-                            totalPages={comments?.data?.totalPage}
-                            onPageChange={(page) => {
-                                handleMove(page);
-                            }}
-                        />}
+                        {comments?.data?.totalPage > 1 && (
+                            <Pagination
+                                showIcons
+                                currentPage={comments?.data?.currentPage}
+                                totalPages={comments?.data?.totalPage}
+                                onPageChange={(page) => {
+                                    handleMove(page);
+                                }}
+                            />
+                        )}
                     </nav>
-                    <div className="flex justify-end gap-[25px]">
-
-                    </div>
+                    <div className="flex justify-end gap-[25px]"></div>
                 </AlertDialog.Content>
             </AlertDialog.Portal>
         </AlertDialog.Root>

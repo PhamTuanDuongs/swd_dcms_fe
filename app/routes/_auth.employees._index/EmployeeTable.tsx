@@ -1,6 +1,8 @@
 import { Link } from "@remix-run/react";
-import DeleteButton from "./deleteemployee";
 import { Table } from "flowbite-react";
+
+import DeleteButton from "./deleteemployee";
+
 import type { Medstaff } from "~/types/medstaff";
 export const EmployeeTable = ({ employees, currentPage }: { employees: Medstaff[]; currentPage: number }) => {
     return (

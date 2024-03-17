@@ -1,8 +1,9 @@
 import { Link } from "@remix-run/react";
-import { CancelAppointment } from "./CancelAppointment";
-import StatusBadge from "~/components/StatusBadgeComponent";
-import ApproveAppointment from "./ApproveAppointment";
+
 import ApproveAppointmentComponent from "./ApproveAppointment";
+import { CancelAppointment } from "./CancelAppointment";
+
+import StatusBadge from "~/components/StatusBadgeComponent";
 
 export default function AppointmentDetailComponent({ data, user }: any) {
     return (
@@ -17,9 +18,7 @@ export default function AppointmentDetailComponent({ data, user }: any) {
                     <StatusBadge status={data?.status} />
                 </div>
             </div>
-            <div className="grid grid-cols-5 mx-2">
-              
-            </div>
+            <div className="grid grid-cols-5 mx-2"></div>
             <div className="grid grid-cols-5 ">
                 <div className="col-span-2">
                     <div className="content flex mb-10">

@@ -1,16 +1,18 @@
-import { ActionArgs, ActionFunction, LoaderArgs, V2_MetaFunction, json } from "@remix-run/cloudflare";
-import { useActionData, useLoaderData, useNavigate } from "@remix-run/react";
-import { getEmployees, getEmployeesById, getUserByNationalID, updateMedStaff } from "~/services/medstaff";
-import { MedstaffMetadata, Role } from "~/types";
-import UpdateEmployee from "./updateComponent";
-import { getAllRoleEmployee } from "~/services/role";
-import { zfd } from "zod-form-data";
-import { z } from "zod";
-import * as Toast from "@radix-ui/react-toast";
 import React from "react";
+import * as Toast from "@radix-ui/react-toast";
+import { ActionFunction, ActionFunctionArgs, json, LoaderFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
+import { useActionData, useLoaderData, useNavigate } from "@remix-run/react";
+import { z } from "zod";
+import { zfd } from "zod-form-data";
+
+import UpdateEmployee from "./updateComponent";
+
+import { getEmployees, getEmployeesById, getUserByNationalID, updateMedStaff } from "~/services/medstaff";
+import { getAllRoleEmployee } from "~/services/role";
+import { MedstaffMetadata, Role } from "~/types";
 import { requireAdmin } from "~/utils/function/UserUtils";
 
-export async function loader({ context, request }: LoaderArgs) {
+export async function loader({ context, request }: LoaderFunctionArgs) {
     // await requireAdmin(request);
     const url = new URL(request.url);
     const id = url.searchParams.get("id");
@@ -20,23 +22,22 @@ export async function loader({ context, request }: LoaderArgs) {
         if (medstaff == undefined) throw new Response("Metadata not found", { status: 403, statusText: "Internal server error" });
         return json(medstaff);
     } catch (error) {
-        console.log(error)
+        console.log(error);
         throw new Response("Internal server error", { status: 500, statusText: "Internal server error" });
     }
 }
-
 
 export const action: ActionFunction = async ({ context, request }) => {
     const url = new URL(request.url);
     const id = url.searchParams.get("id") as string;
     const formData = await request.formData();
-    const name = await formData.get("name")
-    const dob = await formData.get("dob")
-    const nationalId = await formData.get("nationalId")
-    const gender = await formData.get("gender")
-    const address = await formData.get("address")
-    const quanlification = await formData.get("quanlification")
-    const experience = await formData.get("experience")
+    const name = await formData.get("name");
+    const dob = await formData.get("dob");
+    const nationalId = await formData.get("nationalId");
+    const gender = await formData.get("gender");
+    const address = await formData.get("address");
+    const quanlification = await formData.get("quanlification");
+    const experience = await formData.get("experience");
 
     const medstaff = {
         id: id,
@@ -49,10 +50,9 @@ export const action: ActionFunction = async ({ context, request }) => {
             gender: gender,
             address: address,
         },
-    }
+    };
 
     try {
-
         await updateMedStaff(context, medstaff);
         return json({
             message: "Update successfully",
@@ -69,12 +69,12 @@ export const action: ActionFunction = async ({ context, request }) => {
             },
             {
                 status: 400,
-            }
+            },
         );
     }
 };
 
-export const meta: V2_MetaFunction = () => {
+export const meta: MetaFunction = () => {
     return [{ title: "Edit Employee" }];
 };
 

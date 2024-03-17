@@ -1,16 +1,16 @@
+import React, { Fragment, useEffect } from "react";
+import { toast } from "react-toastify";
+import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Cross2Icon } from "@radix-ui/react-icons";
+import { redirect } from "@remix-run/cloudflare";
 import { FetcherWithComponents, useFetcher, useRevalidator } from "@remix-run/react";
-import { Fragment, useEffect } from "react";
-import type { MedstaffMetadata } from "~/types";
-import { toast } from "react-toastify";
+
 import { ROOMS } from "./route";
+
+import type { MedstaffMetadata } from "~/types";
 import type { Shift } from "~/types/shift";
 import { useIsMount } from "~/utils/hooks";
-
-import * as AlertDialog from "@radix-ui/react-alert-dialog";
-import React from "react";
-import { redirect } from "@remix-run/cloudflare";
 
 export default function ShiftModal({ shift, employees }: { shift: Shift; employees: MedstaffMetadata[] }) {
     const fetcher = useFetcher();
@@ -156,7 +156,7 @@ const EmployeeRow = ({ employee, shift, fetcher }: { employee: MedstaffMetadata;
                         metadataId: employee?.userDTO?.metadata?.id?.toString() ?? "",
                         shiftId: shift.id.toString(),
                     },
-                    { method: "POST" }
+                    { method: "POST" },
                 )
             }
             defaultValue={shift?.staffShifts?.find((staffShift) => staffShift.staff.id === employee.id)?.room ?? "None"}
@@ -179,7 +179,7 @@ const EmployeeRow = ({ employee, shift, fetcher }: { employee: MedstaffMetadata;
                         metadataId: employee?.userDTO?.metadata?.id?.toString() ?? "",
                         shiftId: shift.id.toString(),
                     },
-                    { method: "POST" }
+                    { method: "POST" },
                 );
             }}
             className="text-red-600 bg-gray-50 border-red-600 hover:bg-red-200 focus:shadow-mauve7 inline-flex h-[35px] items-center justify-center rounded-[4px] px-[15px] font-medium leading-none outline-none focus:shadow-[0_0_0_2px] border-2"

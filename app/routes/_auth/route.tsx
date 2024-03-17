@@ -1,8 +1,14 @@
 import { Outlet, useRouteLoaderData } from "@remix-run/react";
-import { SideNavbar } from "~/components/SideNavbar";
-import Header from "~/components/Header";
+import styles from "@smastrom/react-rating/style.css?url";
+
 import Footer from "~/components/Footer";
+import Header from "~/components/Header";
+import { SideNavbar } from "~/components/SideNavbar";
 import type { User } from "~/types";
+
+export function links() {
+    return [{ rel: "stylesheet", href: styles }];
+}
 
 export default function AuthenticatedLayout() {
     const { user } = useRouteLoaderData("root") as { user: User | null };

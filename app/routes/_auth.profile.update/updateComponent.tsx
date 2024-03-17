@@ -1,10 +1,11 @@
 import { useRef, useState } from "react";
-import { z } from "zod";
-import type { User } from "~/types";
 import { useForm } from "react-hook-form";
-import { Form, Link, useSubmit } from "@remix-run/react";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { FaEdit } from "react-icons/fa";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form, Link, useSubmit } from "@remix-run/react";
+import { z } from "zod";
+
+import type { User } from "~/types";
 
 interface PropsType {
     user: User;

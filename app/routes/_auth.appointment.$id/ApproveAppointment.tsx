@@ -1,7 +1,6 @@
+import React from "react";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import { Form } from "@remix-run/react";
-import React from "react";
-
 
 export default function ApproveAppointmentComponent({ appointmentId }: { appointmentId: number }) {
     const [open, setOpen] = React.useState(false);
@@ -15,7 +14,7 @@ export default function ApproveAppointmentComponent({ appointmentId }: { appoint
                     }}
                     className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded block m-3 w-1/2"
                 >
-                 Approve
+                    Approve
                 </button>
             </AlertDialog.Trigger>
             <AlertDialog.Portal>
@@ -28,7 +27,7 @@ export default function ApproveAppointmentComponent({ appointmentId }: { appoint
                     <div className="flex justify-end gap-[25px]">
                         <AlertDialog.Cancel asChild>
                             <button className="text-mauve11 bg-mauve4 hover:bg-mauve5 focus:shadow-mauve7 inline-flex h-[35px] items-center justify-center rounded-[4px] px-[15px] font-medium leading-none outline-none focus:shadow-[0_0_0_2px]">
-                               No
+                                No
                             </button>
                         </AlertDialog.Cancel>
                         <Form

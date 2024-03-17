@@ -1,5 +1,5 @@
+import { useEffect, useRef } from "react";
 import { useNavigate, useRevalidator } from "@remix-run/react";
-import { useRef, useEffect } from "react";
 
 export const useLogout = () => {
     const navigate = useNavigate();

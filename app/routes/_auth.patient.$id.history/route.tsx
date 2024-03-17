@@ -1,11 +1,13 @@
-import { LoaderArgs } from "@remix-run/cloudflare";
-import HistoryTable from "./HistoryTable";
-import { requireUser } from "~/utils/function/UserUtils";
-import { GetAppointmentHistory } from "~/services/appointment";
-import { HTTPError } from "ky-universal";
+import { LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
+import { HTTPError } from "ky";
 
-export async function loader({ request, context, params }: LoaderArgs) {
+import HistoryTable from "./HistoryTable";
+
+import { GetAppointmentHistory } from "~/services/appointment";
+import { requireUser } from "~/utils/function/UserUtils";
+
+export async function loader({ request, context, params }: LoaderFunctionArgs) {
     await requireUser(request);
     try {
         const url = new URL(request.url);
@@ -21,7 +23,7 @@ export async function loader({ request, context, params }: LoaderArgs) {
                 JSON.stringify({
                     error: error?.message,
                 }),
-                { status: status }
+                { status: status },
             );
         }
     }

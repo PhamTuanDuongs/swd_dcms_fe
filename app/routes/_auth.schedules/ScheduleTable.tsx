@@ -1,8 +1,10 @@
-import { Table } from "flowbite-react";
 import dayjs from "dayjs";
+import { Table } from "flowbite-react";
+
 import ShiftModal from "./ShiftModal";
-import type { Shift } from "~/types/shift";
+
 import type { MedstaffMetadata } from "~/types";
+import type { Shift } from "~/types/shift";
 
 export default function ScheduleTable({ shifts, employees }: { shifts: Shift[]; employees: MedstaffMetadata[] }) {
     return (

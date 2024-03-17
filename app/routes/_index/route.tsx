@@ -1,9 +1,11 @@
+import { Link, useRouteLoaderData } from "@remix-run/react";
+
 import Feature from "./Feature";
-import Footer from "~/components/Footer";
-import Header from "~/components/Header";
 import Hero from "./Hero";
 import Testimonials from "./Testimonials";
-import { Link, useRouteLoaderData } from "@remix-run/react";
+
+import Footer from "~/components/Footer";
+import Header from "~/components/Header";
 import type { User } from "~/types";
 
 export default function Index() {

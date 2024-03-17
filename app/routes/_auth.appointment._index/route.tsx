@@ -1,14 +1,16 @@
-import { json, type LoaderArgs } from "@remix-run/cloudflare";
+import { json, type LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { Form, useLoaderData, useNavigate } from "@remix-run/react";
 import { Pagination } from "flowbite-react";
-import { HTTPError } from "ky-universal";
-import { getAllPendingAndApprovedAppointments } from "~/services/appointment";
-import { requireUser } from "~/utils/function/UserUtils";
-import { AppointmentTable } from "./AppointmentTable";
-import { Select } from "~/components/Select";
-import { APP_STATUS } from "~/types/appointment";
+import { HTTPError } from "ky";
 
-export async function loader({ request, context }: LoaderArgs) {
+import { AppointmentTable } from "./AppointmentTable";
+
+import { Select } from "~/components/Select";
+import { getAllPendingAndApprovedAppointments } from "~/services/appointment";
+import { APP_STATUS } from "~/types/appointment";
+import { requireUser } from "~/utils/function/UserUtils";
+
+export async function loader({ request, context }: LoaderFunctionArgs) {
     await requireUser(request);
 
     const url = new URL(request.url);
@@ -34,7 +36,7 @@ export async function loader({ request, context }: LoaderArgs) {
                 JSON.stringify({
                     error: error?.message,
                 }),
-                { status: error?.response?.status ?? 500 }
+                { status: error?.response?.status ?? 500 },
             );
         }
 
@@ -44,7 +46,7 @@ export async function loader({ request, context }: LoaderArgs) {
             },
             {
                 status: 500,
-            }
+            },
         );
     }
 }

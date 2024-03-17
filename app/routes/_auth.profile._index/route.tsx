@@ -1,18 +1,11 @@
+import { MetaFunction } from "@remix-run/cloudflare";
 import { Link, useRouteLoaderData } from "@remix-run/react";
-import { useEffect } from "react";
-import { FaMapMarkerAlt } from "react-icons/fa";
-// import { AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
-import { ComponentPlaceholderIcon } from "@radix-ui/react-icons";
-import type { User } from "~/types";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
-import { V2_MetaFunction } from "@remix-run/cloudflare";
 
-export const meta: V2_MetaFunction = () => {
-    return [
-      { title: "Profile" },
-    ];
-  };
+import type { User } from "~/types";
+
+export const meta: MetaFunction = () => {
+    return [{ title: "Profile" }];
+};
 
 export default function ViewProfile() {
     const user = useRouteLoaderData("routes/_auth.profile") as User;

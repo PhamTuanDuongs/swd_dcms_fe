@@ -1,15 +1,18 @@
-import { type ActionArgs, type LoaderArgs, json } from "@remix-run/cloudflare";
-import { deleteEmployee, findAllRoleAndName } from "../../services/medstaff";
+import { useEffect, useState } from "react";
+import { type ActionFunctionArgs, json, type LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { Form, Link, type ShouldRevalidateFunction, useActionData, useLoaderData, useNavigate } from "@remix-run/react";
+import { Pagination } from "flowbite-react";
+import { HTTPError } from "ky";
+
+import { deleteEmployee, findAllRoleAndName } from "../../services/medstaff";
+
+import { EmployeeTable } from "./EmployeeTable";
+
+import { Select } from "~/components/Select";
 import ToastDemo from "~/components/toatsdemo";
 import { requireAdmin } from "~/utils/function/UserUtils";
-import { useEffect, useState } from "react";
-import { EmployeeTable } from "./EmployeeTable";
-import { HTTPError } from "ky-universal";
-import { Pagination } from "flowbite-react";
-import { Select } from "~/components/Select";
 
-export async function loader({ context, request }: LoaderArgs) {
+export async function loader({ context, request }: LoaderFunctionArgs) {
     await requireAdmin(request);
     const url = new URL(request.url);
     const role = url.searchParams.get("role") ?? "all";
@@ -60,7 +63,7 @@ export const shouldValidate: ShouldRevalidateFunction = ({ actionResult, current
     return true;
 };
 
-export async function action({ request, context }: ActionArgs) {
+export async function action({ request, context }: ActionFunctionArgs) {
     const body = await request.formData();
     const id = body.get("id");
     try {

@@ -1,5 +1,5 @@
 import type { AppLoadContext } from "@remix-run/cloudflare";
-import ky from "ky-universal";
+import ky from "ky";
 
 export const api = (context: AppLoadContext) => {
     if (!context.SPRING_URL) {

@@ -1,16 +1,16 @@
-import { type ActionArgs, type LoaderArgs, json } from "@remix-run/cloudflare";
-import AppointmentDetailComponent from "./AppointmentDetailComponent";
-import { ApproveAppointment, CancleAppointment, GetAppointmentDetail } from "~/services/appointment";
-import { GetCurrentUser, requireUser } from "~/utils/function/UserUtils";
-import { HTTPError } from "ky-universal";
-import { useActionData, useLoaderData, Outlet, Link } from "@remix-run/react";
-import { ToastMessage } from "./Toast";
-import { Feedback } from "./FeedbackComponent";
-import { AddFeedBack, FeedbackObject } from "~/services/feedback";
+import { type ActionFunctionArgs, json, type LoaderFunctionArgs } from "@remix-run/cloudflare";
+import { Link, Outlet, useActionData, useLoaderData } from "@remix-run/react";
+import { HTTPError } from "ky";
 
-export async function loader({ request, context, params }: LoaderArgs) {
+import { Feedback } from "./FeedbackComponent";
+
+import { ApproveAppointment, CancleAppointment, GetAppointmentDetail } from "~/services/appointment";
+import { AddFeedBack, FeedbackObject } from "~/services/feedback";
+import { GetCurrentUser, requireUser } from "~/utils/function/UserUtils";
+
+export async function loader({ request, context, params }: LoaderFunctionArgs) {
     await requireUser(request);
-    
+
     try {
         const user = await GetCurrentUser(request);
         const data = await GetAppointmentDetail(params?.id, context, request);
@@ -28,8 +28,7 @@ export async function loader({ request, context, params }: LoaderArgs) {
     }
 }
 
-
-export async function action({ request, context }: ActionArgs) {
+export async function action({ request, context }: ActionFunctionArgs) {
     const body = await request.formData();
     const id = body.get("id") as string;
 
@@ -71,7 +70,6 @@ export async function action({ request, context }: ActionArgs) {
 
     if (request.method == "PUT") {
         try {
-
             const doctorPoint = parseInt(body.get("doctorPoint")?.toString() || "0");
             const appointmentPoint = parseInt(body.get("appointmentPoint")?.toString() || "0");
             const comment = body.get("comment")?.toString() || "";
@@ -79,8 +77,8 @@ export async function action({ request, context }: ActionArgs) {
                 doctorPoint,
                 appointmentPoint,
                 comment,
-            }
-            const result = await AddFeedBack(feedback, id, context)
+            };
+            const result = await AddFeedBack(feedback, id, context);
             return json({
                 message: result,
             });
@@ -91,16 +89,11 @@ export async function action({ request, context }: ActionArgs) {
                 });
             }
         }
-
-
     }
-
 }
 
-
-
 export default function AppointmentDetail() {
-    const { data, user } : any = useLoaderData<typeof loader>();
+    const { data, user }: any = useLoaderData<typeof loader>();
     const status = useActionData<typeof action>();
 
     return (
@@ -109,7 +102,10 @@ export default function AppointmentDetail() {
                 <div className="col-span-4">
                     <div className="flex space-x-10">
                         <div>
-                            <Link to="." className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded block m-3 w-full">
+                            <Link
+                                to="."
+                                className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded block m-3 w-full"
+                            >
                                 Overview
                             </Link>
                         </div>

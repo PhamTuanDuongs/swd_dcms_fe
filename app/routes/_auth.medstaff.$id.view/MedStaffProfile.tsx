@@ -1,8 +1,8 @@
+import { BsFillTelephoneFill, BsGenderAmbiguous } from "react-icons/bs";
 import { Rating, ThinStar } from "@smastrom/react-rating";
 
-import "@smastrom/react-rating/style.css";
-import { BsFillTelephoneFill,BsGenderAmbiguous, } from "react-icons/bs";
 import { ViewFeedBack } from "./ViewFeedBack";
+
 export default function MedStaffProfile({ data }: any) {
     const qualificationArr = data?.medStaff.qualification.split(".");
     const experiecneArr = data?.medStaff.experience.split(".");
@@ -40,40 +40,29 @@ export default function MedStaffProfile({ data }: any) {
                             <span></span>
                         </p>
                         <div className="flex justify-center px-6 my-5">
-                           <ViewFeedBack medstaffId={data?.medStaff.id}/>
+                            <ViewFeedBack medstaffId={data?.medStaff.id} />
                         </div>
                         <div className="flex justify-between items-center my-5 px-6"></div>
 
                         <div className="w-full">
-
-
-
                             <h3 className="font-medium text-gray-900 text-left px-6">Information</h3>
 
-
                             <div className="mt-5 w-full flex flex-col items-center overflow-hidden text-sm">
-                                <div
-                                    className="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150"
-                                >
+                                <div className="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150">
                                     <BsGenderAmbiguous className="inline-block mr-2" />
                                     Gender: <span className="font-bold">{data?.medStaff.metadata.gender ? "Male" : "Female"}</span>
                                 </div>
                             </div>
 
                             <div className="mt-5 w-full flex flex-col items-center overflow-hidden text-sm">
-                                <div
-                                    className="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150"
-                                >
+                                <div className="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150">
                                     <BsFillTelephoneFill className="inline-block mr-2" />
                                     Phone Number: <span className="font-bold">{data?.medStaff.metadata.phoneNo}</span>
                                 </div>
                             </div>
 
                             <div className="mt-5 w-full flex flex-col items-center overflow-hidden text-sm">
-                                <div
-                                    className="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150"
-                                >
-                                   
+                                <div className="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150">
                                     Qualification:
                                     <ul className="ml-8 list-disc">
                                         {qualificationArr
@@ -85,10 +74,7 @@ export default function MedStaffProfile({ data }: any) {
                                 </div>
                             </div>
                             <div className="mt-5 w-full flex flex-col items-center overflow-hidden text-sm">
-                                <div
-                                    className="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150"
-                                >
-                                   
+                                <div className="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150">
                                     Experience
                                     <ul className="ml-8 list-disc">
                                         {experiecneArr

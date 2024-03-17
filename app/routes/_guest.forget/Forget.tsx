@@ -1,8 +1,9 @@
 import * as Tabs from "@radix-ui/react-tabs";
 import { Form, Link, useNavigation } from "@remix-run/react";
-import Loading from "~/components/loadingspinner";
 import { z } from "zod";
+
 import FormError from "~/components/formerror";
+import Loading from "~/components/loadingspinner";
 
 export const ForgetSchema = z.object({
     email: z
@@ -52,13 +53,11 @@ export default function ProcessForget(props: any) {
                         >
                             Submit
                         </button>
-
-                      
                     </div>
 
                     <div>
-                            <h1 className="flex justify-center text-red-500">{props.message}</h1>
-                        </div>
+                        <h1 className="flex justify-center text-red-500">{props.message}</h1>
+                    </div>
                 </Form>
             </Tabs.Content>
         </Tabs.Root>

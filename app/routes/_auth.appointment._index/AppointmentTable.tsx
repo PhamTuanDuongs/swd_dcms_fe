@@ -1,6 +1,7 @@
 import { Link } from "@remix-run/react";
 import dayjs from "dayjs";
 import { Table } from "flowbite-react";
+
 import StatusBadge from "~/components/StatusBadgeComponent";
 import type { Appointment } from "~/types/appointment";
 

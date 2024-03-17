@@ -1,5 +1,6 @@
-import { Form, Link, useSubmit } from "@remix-run/react";
 import { useState } from "react";
+import { Form, Link, useSubmit } from "@remix-run/react";
+
 import StatusBadge from "~/components/StatusBadgeComponent";
 
 export default function HistoryTable({ data, patientId }: any) {
@@ -9,8 +10,8 @@ export default function HistoryTable({ data, patientId }: any) {
     const handleOnclick = (id: number) => {
         setTab(id);
     };
-    const { currentPage, totalPage, sortBy ,query} = data;
-    const appointments = [...data?.appointments];
+    const { currentPage, totalPage, sortBy, query } = data;
+    const appointments = [...data.appointments];
     const submit = useSubmit();
     return (
         <div>
@@ -141,7 +142,7 @@ export default function HistoryTable({ data, patientId }: any) {
                     <ul className="inline-flex -space-x-px">
                         <li>
                             <Link
-                            style={currentPage == 1 ?  {pointerEvents: "none"} : {}}
+                                style={currentPage == 1 ? { pointerEvents: "none" } : {}}
                                 to={`../../patient/${patientId}/history?page=${currentPage - 1}&sortBy=${sortBy}&query=${query}`}
                                 className="bg-white border border-gray-300 text-gray-500 hover:bg-gray-100 hover:text-gray-700 ml-0 rounded-l-lg leading-tight py-2 px-3 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                             >
@@ -151,7 +152,7 @@ export default function HistoryTable({ data, patientId }: any) {
 
                         <li>
                             <Link
-                             style={currentPage == totalPage ?  {pointerEvents: "none"} : {}}
+                                style={currentPage == totalPage ? { pointerEvents: "none" } : {}}
                                 to={`../../patient/${patientId}/history?page=${currentPage + 1}&sortBy=${sortBy}&query=${query}`}
                                 className="bg-white border border-gray-300 text-gray-500 hover:bg-gray-100 hover:text-gray-700 rounded-r-lg leading-tight py-2 px-3 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                             >

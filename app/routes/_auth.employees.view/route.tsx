@@ -1,10 +1,11 @@
-import { type LoaderArgs, type V2_MetaFunction, json } from "@remix-run/cloudflare";
+import { json, type LoaderFunctionArgs, type MetaFunction } from "@remix-run/cloudflare";
 import { Link, useLoaderData } from "@remix-run/react";
+
 import { getEmployeesById } from "~/services/medstaff";
 import type { MedstaffMetadata } from "~/types";
 import { requireAdmin } from "~/utils/function/UserUtils";
 
-export async function loader({ context, request }: LoaderArgs) {
+export async function loader({ context, request }: LoaderFunctionArgs) {
     // await requireAdmin(request);
     const url = new URL(request.url);
     const id = url.searchParams.get("id");
@@ -16,7 +17,7 @@ export async function loader({ context, request }: LoaderArgs) {
     }
 }
 
-export const meta: V2_MetaFunction = () => {
+export const meta: MetaFunction = () => {
     return [{ title: "View Employee Details" }];
 };
 
@@ -103,7 +104,7 @@ export default function View() {
                                             {e}.
                                         </li>
                                     ))} */}
-                                    {data.quanlification}
+                                {data.quanlification}
                             </ul>
                         </div>
                         <div className="content m-8 mt-8">
@@ -116,8 +117,7 @@ export default function View() {
                                             {e}.
                                         </li>
                                     ))} */}
-                                    {data.experience}
-
+                                {data.experience}
                             </ul>
                         </div>
                         <button className=" ml-4 inline-flex items-center justify-center rounded font-medium text-[15px] px-[15px] leading-[35px] h-[35px] bg-white text-violet11 shadow-[0_2px_10px] shadow-blackA7 outline-none hover:bg-mauve3 focus:shadow-[0_0_0_2px] focus:shadow-black">

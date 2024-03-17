@@ -1,6 +1,6 @@
 import { Fragment } from "react";
-import { Listbox, Transition } from "@headlessui/react";
 import { RxCaretSort, RxCheck } from "react-icons/rx";
+import { Listbox, Transition } from "@headlessui/react";
 
 interface Option {
     text: string;

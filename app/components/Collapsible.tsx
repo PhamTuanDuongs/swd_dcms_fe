@@ -1,6 +1,6 @@
-import * as RadixCollapsible from "@radix-ui/react-collapsible";
-import { RowSpacingIcon, Cross2Icon } from "@radix-ui/react-icons";
 import { useState } from "react";
+import * as RadixCollapsible from "@radix-ui/react-collapsible";
+import { Cross2Icon, RowSpacingIcon } from "@radix-ui/react-icons";
 
 interface Props {
     isOpen?: boolean;

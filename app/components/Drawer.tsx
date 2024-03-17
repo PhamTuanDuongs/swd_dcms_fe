@@ -1,6 +1,6 @@
-import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, type ReactNode } from "react";
 import { RxCross1 } from "react-icons/rx";
+import { Dialog, Transition } from "@headlessui/react";
 
 interface DrawerProps {
     title: string;

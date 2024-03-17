@@ -1,17 +1,18 @@
+import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, redirect } from "@remix-run/cloudflare";
+import { useLoaderData } from "@remix-run/react";
 import { Rating, ThinStar } from "@smastrom/react-rating";
-import "@smastrom/react-rating/style.css";
+
 import MedStaffProfile from "./MedStaffProfile";
-import { LoaderArgs, V2_MetaFunction, redirect, ActionArgs } from "@remix-run/cloudflare";
+
+import { GetDoctorFeedback } from "~/services/feedback";
 import { getMedStaffProfile } from "~/services/medstaff";
 import { requireUser } from "~/utils/function/UserUtils";
-import { useLoaderData } from "@remix-run/react";
-import { GetDoctorFeedback } from "~/services/feedback";
 
-export const meta: V2_MetaFunction = () => {
+export const meta: MetaFunction = () => {
     return [{ title: "Profile" }];
 };
 
-export async function loader({ request, context, params }: LoaderArgs) {
+export async function loader({ request, context, params }: LoaderFunctionArgs) {
     await requireUser(request);
     try {
         const data = await getMedStaffProfile(context, params?.id);
@@ -21,7 +22,7 @@ export async function loader({ request, context, params }: LoaderArgs) {
     }
 }
 
-export async function action({ request, context, params }: ActionArgs) {
+export async function action({ request, context, params }: ActionFunctionArgs) {
     try {
         const url = new URL(request.url);
         const page = url.searchParams.get("page") || "1";
@@ -29,7 +30,7 @@ export async function action({ request, context, params }: ActionArgs) {
         return data;
     } catch (error) {
         return {
-            error: "Can't load feedback"
+            error: "Can't load feedback",
         };
     }
 }

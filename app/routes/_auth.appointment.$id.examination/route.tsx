@@ -1,14 +1,16 @@
-import { json, V2_MetaFunction, type LoaderArgs } from "@remix-run/cloudflare";
-import { requireAdmin } from "~/utils/function/UserUtils";
-import { getAllExaminationByAppointId } from "~/services/examination";
-import { HTTPError } from "ky-universal";
+import { json, type LoaderFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
 import { Link, useLoaderData, useNavigate } from "@remix-run/react";
 import { Pagination } from "flowbite-react";
+import { HTTPError } from "ky";
+
 import { ExaminationTable } from "./ExaminationTable";
-export const meta: V2_MetaFunction = () => {
+
+import { getAllExaminationByAppointId } from "~/services/examination";
+import { requireAdmin } from "~/utils/function/UserUtils";
+export const meta: MetaFunction = () => {
     return [{ title: "Examination" }];
 };
-export async function loader({ context, request, params }: LoaderArgs) {
+export async function loader({ context, request, params }: LoaderFunctionArgs) {
     await requireAdmin(request);
     const url = new URL(request.url);
     const pageNo = url.searchParams.get("pageNo") ?? "1";
@@ -34,7 +36,7 @@ export async function loader({ context, request, params }: LoaderArgs) {
                 JSON.stringify({
                     error: error?.message,
                 }),
-                { status: error?.response?.status ?? 500 }
+                { status: error?.response?.status ?? 500 },
             );
         }
 
@@ -44,7 +46,7 @@ export async function loader({ context, request, params }: LoaderArgs) {
             },
             {
                 status: 500,
-            }
+            },
         );
     }
 }

@@ -1,13 +1,15 @@
-import { ActionArgs, json } from "@remix-run/cloudflare";
-import { useActionData, useNavigate } from "@remix-run/react";
-import ky from "ky-universal";
 import { useEffect } from "react";
+import { ActionFunctionArgs, json } from "@remix-run/cloudflare";
+import { useActionData, useNavigate } from "@remix-run/react";
+import { HTTPError } from "ky";
 import { z } from "zod";
-import ToastDemo from "~/components/toatsdemo";
+
 import RegisterForm, { SignupSchema } from "./signup";
+
+import ToastDemo from "~/components/toatsdemo";
 import { RegisterUser } from "~/services/user";
 
-export async function action({ request, context }: ActionArgs) {
+export async function action({ request, context }: ActionFunctionArgs) {
     const body = await request.formData();
 
     const email = body.get("email");
@@ -57,35 +59,41 @@ export async function action({ request, context }: ActionArgs) {
             },
         };
 
-        const result = await RegisterUser(user, context);
-    } catch (error: any) {
-        const status = error?.response?.status;
+        await RegisterUser(user, context);
+    } catch (error) {
         if (error instanceof z.ZodError) {
             return json({ status: "validate", message: error.issues });
         }
-        switch (status) {
-            case 400:
-                return json({ status: "400", message: "Email has been used" });
-            default:
-                return json({ status: "500", message: "Server error" });
+
+        if (error instanceof HTTPError) {
+            const status = error?.response?.status;
+
+            switch (status) {
+                case 400:
+                    return json({ status: "400", message: "Email has been used" });
+                default:
+                    return json({ status: "500", message: "Server error" });
+            }
         }
     }
     return json({ status: "200", message: "Sign up succefully" });
 }
 
 export default function Register() {
-    const data: any = useActionData<typeof action>();
+    const data = useActionData<typeof action>();
     const navigate = useNavigate();
     useEffect(() => {
-        if (data?.status == "200") {
-            var navigateOnSuccess = setTimeout(() => {
-                navigate("/");
-            }, 2000);
-        }
+        const navigateOnSuccess =
+            data?.status == "200"
+                ? setTimeout(() => {
+                      navigate("/");
+                  }, 2000)
+                : undefined;
+
         return () => {
             clearTimeout(navigateOnSuccess);
         };
-    }, [data]);
+    }, [data, navigate]);
 
     return (
         <div className="signup-container">

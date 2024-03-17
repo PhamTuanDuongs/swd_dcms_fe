@@ -1,6 +1,6 @@
+import React from "react";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import { Form } from "@remix-run/react";
-import React from "react";
 
 export function DeleteService({ serviceId }: { serviceId: number }) {
     const [open, setOpen] = React.useState(false);

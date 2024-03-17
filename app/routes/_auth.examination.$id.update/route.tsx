@@ -1,33 +1,29 @@
+import React from "react";
+import * as Toast from "@radix-ui/react-toast";
 import {
-    LoaderArgs,
-    json,
-    V2_MetaFunction,
-    unstable_composeUploadHandlers,
+    ActionFunctionArgs,
     AppLoadContext,
+    json,
+    LoaderFunctionArgs,
+    MetaFunction,
+    unstable_composeUploadHandlers,
     unstable_createMemoryUploadHandler,
     unstable_parseMultipartFormData,
-    ActionArgs,
 } from "@remix-run/cloudflare";
-import { HTTPError } from "ky-universal";
-import { findAllUndeletedServicesByName } from "~/services/service";
-import { requireAdmin } from "~/utils/function/UserUtils";
-import { type ShouldRevalidateFunction, useActionData, useLoaderData, useNavigate } from "@remix-run/react";
-import { uploadImg } from "~/services/image";
-import { type Examination, type Service } from "~/types";
-import { GetExaminationById, UpdateExaminationById, UpdateImageExameById } from "~/services/examination";
-import * as Toast from "@radix-ui/react-toast";
-import React from "react";
+import { useActionData, useLoaderData, useNavigate } from "@remix-run/react";
+import { HTTPError } from "ky";
+
 import { UpdateExamination } from "./UpdateExamination";
-export const meta: V2_MetaFunction = () => {
+
+import { GetExaminationById, UpdateExaminationById, UpdateImageExameById } from "~/services/examination";
+import { uploadImg } from "~/services/image";
+import { findAllUndeletedServicesByName } from "~/services/service";
+import { type Examination, type Service } from "~/types";
+import { requireAdmin } from "~/utils/function/UserUtils";
+export const meta: MetaFunction = () => {
     return [{ title: "Edit Examination" }];
 };
-export const shouldValidate: ShouldRevalidateFunction = ({ actionResult, currentUrl, defaultShouldRevalidate }) => {
-    //  @ts-ignore
-    return true;
-    if (actionResult?.message == "Update successful") return true;
 
-    return defaultShouldRevalidate;
-};
 const MAX_SIZE = 5 * 1024 * 1024;
 const uploadHandler = (context: AppLoadContext) =>
     unstable_composeUploadHandlers(
@@ -61,7 +57,7 @@ const uploadHandler = (context: AppLoadContext) =>
         unstable_createMemoryUploadHandler()
     );
 
-export async function action({ request, context }: ActionArgs) {
+export async function action({ request, context }: ActionFunctionArgs) {
     await requireAdmin(request);
     try {
         if (request.headers.get("content-type")?.includes("multipart/form-data")) {
@@ -109,7 +105,7 @@ export async function action({ request, context }: ActionArgs) {
     }
 }
 
-export async function loader({ context, request }: LoaderArgs) {
+export async function loader({ context, request }: LoaderFunctionArgs) {
     await requireAdmin(request);
     const url = new URL(request.url);
     const path = url.pathname;

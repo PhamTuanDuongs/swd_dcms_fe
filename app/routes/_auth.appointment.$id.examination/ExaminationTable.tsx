@@ -1,5 +1,6 @@
 import { Link } from "@remix-run/react";
 import { Table } from "flowbite-react";
+
 import { type Examination } from "~/types";
 import { formatDate } from "~/utils/function/dateUtils";
 

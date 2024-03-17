@@ -1,15 +1,17 @@
-import type { ActionArgs } from "@remix-run/cloudflare"; // or cloudflare/deno
-import { json } from "@remix-run/cloudflare"; // or cloudflare/deno
-import { Form, useActionData, useNavigate, useSubmit } from "@remix-run/react";
-import { createEmployee, getUserByEmail, getUserByNationalID } from "../../services/medstaff";
-import { z } from "zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as Tabs from "@radix-ui/react-tabs";
+import type { ActionFunctionArgs } from "@remix-run/cloudflare"; // or cloudflare/deno
+import { json } from "@remix-run/cloudflare"; // or cloudflare/deno
+import { Form, useActionData, useNavigate, useSubmit } from "@remix-run/react";
+import { z } from "zod";
 import { zfd } from "zod-form-data";
-import { useEffect } from "react";
-import ToastDemo from "~/components/toatsdemo";
+
+import { createEmployee, getUserByEmail, getUserByNationalID } from "../../services/medstaff";
+
 import ToastFail from "~/components/toastfail";
+import ToastDemo from "~/components/toatsdemo";
 
 const ZEmployeeInput = z.object({
     name: z
@@ -57,7 +59,7 @@ const ZEmployeeInput = z.object({
 });
 type EmployeeInput = z.infer<typeof ZEmployeeInput>;
 
-export async function action({ request, context }: ActionArgs) {
+export async function action({ request, context }: ActionFunctionArgs) {
     const data = await request.formData();
 
     const email = data.get("email");
@@ -76,7 +78,7 @@ export async function action({ request, context }: ActionArgs) {
                 .string()
                 .nonempty()
                 .max(62)
-                .regex(/^[a-zA-Z ]+$/)
+                .regex(/^[a-zA-Z ]+$/),
         ),
         address: zfd.text(z.string().nonempty().max(126)),
         dob: zfd.text(z.coerce.date().max(new Date())),

@@ -1,13 +1,16 @@
-import { type LoaderArgs, json } from "@remix-run/cloudflare";
-import { findAllByNationalId } from "../../services/patient";
+import { json, type LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { Form, Link, type ShouldRevalidateFunction, useLoaderData, useNavigate } from "@remix-run/react";
-import { requireAdmin } from "~/utils/function/UserUtils";
-import { PatientTable } from "./PatientTable";
-import { HTTPError } from "ky-universal";
 import { Pagination } from "flowbite-react";
-import { Select } from "~/components/Select";
+import { HTTPError } from "ky";
 
-export async function loader({ context, request }: LoaderArgs) {
+import { findAllByNationalId } from "../../services/patient";
+
+import { PatientTable } from "./PatientTable";
+
+import { Select } from "~/components/Select";
+import { requireAdmin } from "~/utils/function/UserUtils";
+
+export async function loader({ context, request }: LoaderFunctionArgs) {
     await requireAdmin(request);
     const url = new URL(request.url);
     const nationalId = url.searchParams.get("nationalId") ?? "";
@@ -38,7 +41,7 @@ export async function loader({ context, request }: LoaderArgs) {
                 JSON.stringify({
                     error: error?.message,
                 }),
-                { status: error?.response?.status ?? 500 }
+                { status: error?.response?.status ?? 500 },
             );
         }
 
@@ -46,7 +49,7 @@ export async function loader({ context, request }: LoaderArgs) {
             JSON.stringify({
                 error: "Unknown error",
             }),
-            { status: 500 }
+            { status: 500 },
         );
     }
 }

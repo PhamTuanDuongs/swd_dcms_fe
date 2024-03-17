@@ -1,12 +1,14 @@
-import { ActionArgs, LoaderArgs, json, redirect } from "@remix-run/cloudflare";
-import { useActionData, useLoaderData, useNavigate } from "@remix-run/react";
-import ResetPasswordProcess, { ResetPasswordSchema } from "./resetpassword";
-import { z } from "zod";
-import { ResetPasswordApi } from "~/services/user";
 import { useEffect } from "react";
-import ToastDemo from "~/components/toatsdemo";
+import { ActionFunctionArgs, json, LoaderFunctionArgs, redirect } from "@remix-run/cloudflare";
+import { useActionData, useLoaderData, useNavigate } from "@remix-run/react";
+import { z } from "zod";
 
-export async function loader({ request }: LoaderArgs) {
+import ResetPasswordProcess, { ResetPasswordSchema } from "./resetpassword";
+
+import ToastDemo from "~/components/toatsdemo";
+import { ResetPasswordApi } from "~/services/user";
+
+export async function loader({ request }: LoaderFunctionArgs) {
     try {
         const url = new URL(request.url);
         const resetToken = url.searchParams.get("token");
@@ -17,7 +19,7 @@ export async function loader({ request }: LoaderArgs) {
     }
 }
 
-export async function action({ request, context }: ActionArgs) {
+export async function action({ request, context }: ActionFunctionArgs) {
     const body = await request.formData();
     const password = body.get("password");
     const confirm = body.get("confirm");
@@ -65,7 +67,11 @@ export default function ResetPassword() {
 
     return (
         <div className="reset-pass-container ">
-            <ResetPasswordProcess resetToken={resetToken ?? ""} data={data?.status != "validate" ? data : ""} error={data?.status == "validate" ? data : ""}  />
+            <ResetPasswordProcess
+                resetToken={resetToken ?? ""}
+                data={data?.status != "validate" ? data : ""}
+                error={data?.status == "validate" ? data : ""}
+            />
             {data?.status == "200" ? <ToastDemo message={"Reset password successfully"} /> : ""}
         </div>
     );

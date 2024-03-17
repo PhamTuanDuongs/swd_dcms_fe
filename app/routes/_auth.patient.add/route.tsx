@@ -1,14 +1,16 @@
-import type { ActionArgs } from "@remix-run/cloudflare"; // or cloudflare/deno
-import { json } from "@remix-run/cloudflare"; // or cloudflare/deno
-import { Form, useActionData, useNavigate, useSubmit } from "@remix-run/react";
-import { getUserByNationalID } from "../../services/medstaff";
-import { z } from "zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { ActionFunctionArgs } from "@remix-run/cloudflare"; // or cloudflare/deno
+import { json } from "@remix-run/cloudflare"; // or cloudflare/deno
+import { Form, useActionData, useNavigate, useSubmit } from "@remix-run/react";
+import { z } from "zod";
 import { zfd } from "zod-form-data";
-import { useEffect } from "react";
-import ToastDemo from "~/components/toatsdemo";
+
+import { getUserByNationalID } from "../../services/medstaff";
+
 import ToastFail from "~/components/toastfail";
+import ToastDemo from "~/components/toatsdemo";
 import { RegisterUser } from "~/services/user";
 
 const ZPatientInput = z.object({
@@ -40,7 +42,7 @@ const ZPatientInput = z.object({
 });
 type PatientInput = z.infer<typeof ZPatientInput>;
 
-export async function action({ request, context }: ActionArgs) {
+export async function action({ request, context }: ActionFunctionArgs) {
     const data = await request.formData();
 
     const name = data.get("name");
@@ -56,7 +58,7 @@ export async function action({ request, context }: ActionArgs) {
                 .string()
                 .nonempty()
                 .max(62)
-                .regex(/^[a-zA-Z ]+$/)
+                .regex(/^[a-zA-Z ]+$/),
         ),
         address: zfd.text(z.string().nonempty().max(126)),
         dob: zfd.text(z.coerce.date().max(new Date())),

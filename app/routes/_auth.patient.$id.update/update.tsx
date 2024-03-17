@@ -1,8 +1,9 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, useSubmit } from "@remix-run/react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form, useSubmit } from "@remix-run/react";
 import { z } from "zod";
+
 import { Metadata } from "~/types";
 
 interface PropsType {

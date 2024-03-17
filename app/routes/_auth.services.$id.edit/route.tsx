@@ -1,16 +1,15 @@
-import { getServiceById, editService } from "~/services/service";
-
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import { zodResolver } from "@hookform/resolvers/zod";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import { useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
-import type { LoaderArgs, ActionArgs } from "@remix-run/cloudflare";
-
+import { HTTPError } from "ky";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { HTTPError } from "ky-universal";
-import { useEffect } from "react";
-import { toast } from "react-toastify";
+
+import { editService, getServiceById } from "~/services/service";
 
 const ZService = zfd.formData({
     name: zfd.text(z.string().trim().nonempty("Name is required").max(126, "Name must be less than 255 characters")),
@@ -18,11 +17,11 @@ const ZService = zfd.formData({
         .text(z.string().trim().max(1000, "Description must be less than 1000 characters").optional())
         .transform((value) => (value ? value : "")),
     price: zfd.numeric(
-        z.number().nonnegative("Price must be nonnegative").max(2_000_000_000, { message: "Price must be less than 2,000,000,000" })
+        z.number().nonnegative("Price must be nonnegative").max(2_000_000_000, { message: "Price must be less than 2,000,000,000" }),
     ),
 });
 
-export async function loader({ params, context }: LoaderArgs) {
+export async function loader({ params, context }: LoaderFunctionArgs) {
     if (typeof params?.id !== "undefined") {
         const service = await getServiceById(context, params?.id);
 
@@ -34,7 +33,7 @@ export async function loader({ params, context }: LoaderArgs) {
     }
 }
 
-export async function action({ request, context, params }: ActionArgs) {
+export async function action({ request, context, params }: ActionFunctionArgs) {
     try {
         const { name, description, price } = ZService.parse(await request.formData());
 

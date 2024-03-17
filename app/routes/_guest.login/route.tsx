@@ -1,19 +1,14 @@
-import { type ActionArgs, json } from "@remix-run/cloudflare";
-import { useActionData, useLoaderData, useNavigate } from "@remix-run/react";
 import { useEffect } from "react";
+import { type ActionFunctionArgs, json } from "@remix-run/cloudflare";
+import { useActionData, useLoaderData, useNavigate } from "@remix-run/react";
 import { z } from "zod";
+
 import ToastDemo from "~/components/toatsdemo";
 import LoginForm, { LoginSchema } from "~/routes/_guest.login/LoginComponent";
-
-import styles from "./style.css";
-import { userCookie } from "~/utils/function/UserCookie";
 import { GetLogin } from "~/services/user";
+import { userCookie } from "~/utils/function/UserCookie";
 
-export function links() {
-    return [{ rel: "stylesheet", href: styles }];
-}
-
-export async function action({ request, context }: ActionArgs) {
+export async function action({ request, context }: ActionFunctionArgs) {
     const body = await request.formData();
     const email = body.get("email");
     const password = body.get("password");
@@ -42,14 +37,12 @@ export async function action({ request, context }: ActionArgs) {
     }
 }
 
-export async function loader({ request }: ActionArgs) {
-    try {
-        const url = new URL(request.url);
-        const token = url.searchParams.get("token");
-        if (token != null) {
-            return json({ status: "200", message: "Login succesfully" }, { headers: { "Set-Cookie": await userCookie.serialize(token) } });
-        }
-    } catch (error) {}
+export async function loader({ request }: ActionFunctionArgs) {
+    const url = new URL(request.url);
+    const token = url.searchParams.get("token");
+    if (token != null) {
+        return json({ status: "200", message: "Login succesfully" }, { headers: { "Set-Cookie": await userCookie.serialize(token) } });
+    }
     return json({ status: "not login", message: "" });
 }
 

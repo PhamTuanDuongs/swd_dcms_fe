@@ -1,25 +1,27 @@
+import React from "react";
+import * as Toast from "@radix-ui/react-toast";
 import {
-    LoaderArgs,
-    json,
-    V2_MetaFunction,
-    unstable_composeUploadHandlers,
+    ActionFunctionArgs,
     AppLoadContext,
+    json,
+    LoaderFunctionArgs,
+    MetaFunction,
+    unstable_composeUploadHandlers,
     unstable_createMemoryUploadHandler,
     unstable_parseMultipartFormData,
-    ActionArgs,
 } from "@remix-run/cloudflare";
-import { HTTPError } from "ky-universal";
-import { findAllUndeletedServicesByName } from "~/services/service";
-import { requireAdmin } from "~/utils/function/UserUtils";
-import { AddExamination } from "./AddExamination";
 import { ShouldRevalidateFunction, useActionData, useLoaderData, useNavigate } from "@remix-run/react";
-import { uploadImg } from "~/services/image";
-import { updateAvatar } from "~/services/profile";
-import { Avatar, Service } from "~/types";
+import { HTTPError } from "ky";
+
+import { AddExamination } from "./AddExamination";
+
 import { AddNewExamination } from "~/services/examination";
-import * as Toast from "@radix-ui/react-toast";
-import React from "react";
-export const meta: V2_MetaFunction = () => {
+import { uploadImg } from "~/services/image";
+import { findAllUndeletedServicesByName } from "~/services/service";
+import { Service } from "~/types";
+import { requireAdmin } from "~/utils/function/UserUtils";
+
+export const meta: MetaFunction = () => {
     return [
         { title: "Add Examination" },
         {
@@ -73,7 +75,7 @@ const uploadHandler = (context: AppLoadContext) =>
         unstable_createMemoryUploadHandler()
     );
 
-export async function action({ request, context }: ActionArgs) {
+export async function action({ request, context }: ActionFunctionArgs) {
     await requireAdmin(request);
     try {
         const formData = await unstable_parseMultipartFormData(request, uploadHandler(context));
@@ -104,7 +106,7 @@ export async function action({ request, context }: ActionArgs) {
     }
 }
 
-export async function loader({ context, request }: LoaderArgs) {
+export async function loader({ context, request }: LoaderFunctionArgs) {
     await requireAdmin(request);
     const url = new URL(request.url);
     const appId = url.searchParams.get("appId") as string;

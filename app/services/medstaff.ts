@@ -1,8 +1,10 @@
-import { api } from "./api";
+import type { AppLoadContext } from "@remix-run/cloudflare";
 
 import type { Medstaff } from "../types/medstaff";
-import type { AppLoadContext } from "@remix-run/cloudflare";
-import type { MedstaffMetadata, PageEmployeeResponse, Metadata } from "~/types";
+
+import { api } from "./api";
+
+import type { MedstaffMetadata, Metadata, PageEmployeeResponse } from "~/types";
 
 export async function getEmployees(context: AppLoadContext) {
     return api(context).get("admin/employee/abc").json<Medstaff[]>();
@@ -18,70 +20,41 @@ export async function getEmployeesById(id: any, context: AppLoadContext) {
 }
 
 export const updateMedStaff = async (context: AppLoadContext, info: any) => {
-    try {
-        const res = await api(context)
-            .post("admin/employee/update", {
-                json: info,
-            })
-            .json();
-        return res;
-    } catch (error) {
-        throw error;
-    }
+    const res = await api(context)
+        .post("admin/employee/update", {
+            json: info,
+        })
+        .json();
+    return res;
 };
 export const getUserByEmail = async (context: AppLoadContext, email: any) => {
-    try {
-        const res = await api(context).get(`admin/employee/email/${email}`).json<Medstaff>();
+    const res = await api(context).get(`admin/employee/email/${email}`).json<Medstaff>();
 
-        return res;
-    } catch (error) {
-        throw error;
-    }
+    return res;
 };
 export const getUserByNationalID = async (context: AppLoadContext, nationalID: any) => {
-    try {
-        const res = await api(context).get(`admin/employee/nationalID/${nationalID}`).json<Medstaff>();
+    const res = await api(context).get(`admin/employee/nationalID/${nationalID}`).json<Medstaff>();
 
-        return res;
-    } catch (error) {
-        throw error;
-    }
+    return res;
 };
 
 export const deleteEmployee = async (id: any, context: AppLoadContext) => {
-    try {
-        return await api(context).delete(`admin/employee/delete/${id}`);
-    } catch (error) {
-        throw error;
-    }
+    return await api(context).delete(`admin/employee/delete/${id}`);
 };
 export const getUserByNameAndRole = async (context: AppLoadContext, role: any, name: any) => {
-    try {
-        const res = await api(context).get(`admin/employee/role/${role}/name/${name}`).json<Medstaff[]>();
+    const res = await api(context).get(`admin/employee/role/${role}/name/${name}`).json<Medstaff[]>();
 
-        return res;
-    } catch (error) {
-        throw error;
-    }
+    return res;
 };
 export const getUserByRole = async (context: AppLoadContext, role: any) => {
-    try {
-        const res = await api(context).get(`admin/employee/role/${role}`).json<Medstaff[]>();
+    const res = await api(context).get(`admin/employee/role/${role}`).json<Medstaff[]>();
 
-        return res;
-    } catch (error) {
-        console.log(error);
-        throw error;
-    }
+    return res;
 };
 
 export const getMedStaffProfile = async (context: AppLoadContext, id: any) => {
-    try {
-        const res = await api(context).get(`api/users/med_staff/${id}`).json();
-        return res;
-    } catch (error) {
-        throw error;
-    }
+    const res = await api(context).get(`api/users/med_staff/${id}`).json();
+    return res;
 };
 
 export const findAllRoleAndName = async (context: AppLoadContext, pageNo = 1, role = "", name = "", status = "") => {

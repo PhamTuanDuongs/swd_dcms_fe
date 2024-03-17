@@ -1,15 +1,16 @@
+import type { LoaderFunctionArgs, TypedResponse } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
-import type { LoaderArgs, TypedResponse } from "@remix-run/cloudflare";
 import { Outlet } from "@remix-run/react";
+
 import { getMetadata } from "~/services/profile";
 import type { User } from "~/types";
-import { GetCurrentUser, UserCookie, requireUser } from "~/utils/function/UserUtils";
+import { GetCurrentUser, requireUser, UserCookie } from "~/utils/function/UserUtils";
 
 export function shouldRevalidate() {
     return true;
 }
 
-export async function loader({ context, request }: LoaderArgs) {
+export async function loader({ context, request }: LoaderFunctionArgs) {
     await requireUser(request);
     try {
         const userId = (await GetCurrentUser(request)) as UserCookie;

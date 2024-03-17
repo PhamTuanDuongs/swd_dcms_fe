@@ -1,7 +1,8 @@
-import { type Examination, type Service } from "~/types";
-import { Form } from "@remix-run/react";
-import { FaEdit } from "react-icons/fa";
 import { useRef, useState } from "react";
+import { FaEdit } from "react-icons/fa";
+import { Form } from "@remix-run/react";
+
+import { type Examination, type Service } from "~/types";
 
 export function UpdateExamination({ services, examination }: { services: Service[]; examination: Examination }) {
     const inputFileref = useRef<HTMLInputElement>(null);

@@ -1,14 +1,15 @@
-import { LoaderArgs, V2_MetaFunction, json } from "@remix-run/cloudflare";
+import { json, LoaderFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
 import { Link, useLoaderData, useRouteLoaderData } from "@remix-run/react";
+
 import { getPatientById } from "~/services/patient";
 import { Metadata } from "~/types";
 import { requireAdmin } from "~/utils/function/UserUtils";
 
-export const meta: V2_MetaFunction = () => {
+export const meta: MetaFunction = () => {
     return [{ title: "View Patient Details" }];
 };
 
-export async function loader({ context, request,params }: LoaderArgs) {
+export async function loader({ context, request, params }: LoaderFunctionArgs) {
     await requireAdmin(request);
     const id = params?.id;
     try {
