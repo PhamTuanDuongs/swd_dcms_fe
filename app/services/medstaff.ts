@@ -57,14 +57,11 @@ export const getMedStaffProfile = async (context: AppLoadContext, id: any) => {
     return res;
 };
 
-export const findAllRoleAndName = async (context: AppLoadContext, pageNo = 1, role = "", name = "", status = "") => {
+export const findAllEmployee = async (context: AppLoadContext, pageNo = 1) => {
     const res = await api(context)
         .get("admin/employee/all", {
             searchParams: {
                 pageNo,
-                role,
-                name,
-                status,
             },
         })
         .json<PageEmployeeResponse>();

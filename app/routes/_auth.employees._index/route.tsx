@@ -1,33 +1,26 @@
 import { useEffect, useState } from "react";
 import { type ActionFunctionArgs, json, type LoaderFunctionArgs } from "@remix-run/cloudflare";
-import { Form, Link, type ShouldRevalidateFunction, useActionData, useLoaderData, useNavigate } from "@remix-run/react";
+import { Link, type ShouldRevalidateFunction, useActionData, useLoaderData, useNavigate } from "@remix-run/react";
 import { Pagination } from "flowbite-react";
 import { HTTPError } from "ky";
 
-import { deleteEmployee, findAllRoleAndName } from "../../services/medstaff";
+import { deleteEmployee, findAllEmployee } from "../../services/medstaff";
 
 import { EmployeeTable } from "./EmployeeTable";
 
-import { Select } from "~/components/Select";
 import ToastDemo from "~/components/toatsdemo";
 import { requireAdmin } from "~/utils/function/UserUtils";
 
 export async function loader({ context, request }: LoaderFunctionArgs) {
     await requireAdmin(request);
     const url = new URL(request.url);
-    const role = url.searchParams.get("role") ?? "all";
-    const name = url.searchParams.get("name") ?? "";
-    const status = url.searchParams.get("status") ?? "all";
     const pageNo = url.searchParams.get("pageNo") ?? "1";
 
     try {
-        const pageEmployee = await findAllRoleAndName(context, parseInt(pageNo), role, name, status);
+        const pageEmployee = await findAllEmployee(context, parseInt(pageNo));
 
         return json({
             ...pageEmployee,
-            role,
-            name,
-            status,
         });
     } catch (error) {
         if (error instanceof HTTPError) {
@@ -36,9 +29,6 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
                     currentPage: 0,
                     totalPages: 0,
                     employees: [],
-                    role,
-                    name,
-                    status,
                 });
             }
 
@@ -80,22 +70,9 @@ export async function action({ request, context }: ActionFunctionArgs) {
     }
 }
 
-const statusOptions = [
-    { value: "all", text: "All" },
-    { value: "active", text: "Active" },
-    { value: "inactive", text: "Inactive" },
-];
-
-const roleOptions = [
-    { value: "all", text: "All" },
-    { value: "admin", text: "Admin" },
-    { value: "doctor", text: "Doctor" },
-    { value: "nurse", text: "Nurse" },
-];
-
 export default function List() {
     const [toats, setToats] = useState(false);
-    const { employees, currentPage, totalPages, role, name, status } = useLoaderData<typeof loader>();
+    const { currentPage, totalPage, employees } = useLoaderData<typeof loader>();
     const navigate = useNavigate();
     const data = useActionData<typeof action>();
     useEffect(() => {
@@ -115,50 +92,12 @@ export default function List() {
             <h1 className="text-3xl font-semibold text-gray-900 dark:text-white">Employees</h1>
 
             <div className="mt-4">
-                <Form method="get" action="/employees" className="flex gap-5">
-                    <fieldset className="flex flex-col gap-1">
-                        <label className="text-md font-medium text-gray-900 dark:text-white" htmlFor="role">
-                            Role
-                        </label>
-
-                        <Select name="role" defaultValue={role} options={roleOptions} width="w-32" />
-                    </fieldset>
-
-                    <fieldset className="flex flex-col gap-1">
-                        <label className="text-md font-medium text-gray-900 dark:text-white" htmlFor="status">
-                            Status
-                        </label>
-
-                        <Select name="status" defaultValue={status} options={statusOptions} width="w-32" />
-                    </fieldset>
-
-                    <div className="flex flex-col gap-1">
-                        <label className="text-md font-medium text-gray-900 dark:text-white" htmlFor="name">
-                            Name
-                        </label>
-
-                        <input
-                            type="text"
-                            name="name"
-                            defaultValue={name}
-                            className="px-4 py-2 border-gray-300 rounded-lg dark:border-gray-700 focus:ring-theme-500 focus:border-theme-500"
-                        />
-                    </div>
-
-                    <button
-                        type="submit"
-                        className="px-4 py-2 text-sm font-medium rounded-lg place-self-end bg-indigo-500 text-slate-50 hover:bg-indigo-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-theme-800 focus-visible:ring-opacity-75"
-                    >
-                        Search
-                    </button>
-
-                    <Link
-                        to="/employees/add"
-                        className="self-end ml-auto px-4 py-2 text-sm font-semibold text-center bg-indigo-500 rounded-lg text-slate-50 hover:bg-indigo-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-theme-800 focus-visible:ring-opacity-75"
-                    >
-                        Add Employee
-                    </Link>
-                </Form>
+                <Link
+                    to="/employees/add"
+                    className="self-end ml-auto px-4 py-2 text-sm font-semibold text-center bg-indigo-500 rounded-lg text-slate-50 hover:bg-indigo-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-theme-800 focus-visible:ring-opacity-75"
+                >
+                    Add Employee
+                </Link>
 
                 <div className="mt-8">
                     {employees.length > 0 ? (
@@ -170,13 +109,13 @@ export default function List() {
                     )}
                 </div>
 
-                {totalPages > 1 && (
+                {totalPage > 1 && (
                     <div className="flex justify-end">
                         <Pagination
                             showIcons
                             currentPage={currentPage}
-                            onPageChange={(page) => navigate(`.?pageNo=${page}&role=${role}&name=${name}&status=${status}`)}
-                            totalPages={totalPages}
+                            onPageChange={(page) => navigate(`.?pageNo=${page}`)}
+                            totalPages={totalPage}
                         />
                     </div>
                 )}

@@ -1,5 +1,4 @@
 import { Appointment } from "./appointment";
-import type { Medstaff } from "./medstaff";
 
 export interface User {
     id: number;
@@ -7,7 +6,6 @@ export interface User {
     createdAt: string;
     verifiedAt: string;
     resetPasswordToken?: string;
-
     metadata: Metadata;
     role: Role;
 }
@@ -53,11 +51,7 @@ export interface MedstaffMetadata {
     qualification: string;
     experience: string;
 }
-export interface PageEmployeeResponse {
-    totalPages: number;
-    currentPage: number;
-    employees: Medstaff[];
-}
+
 export interface PagePatientResponse {
     totalPages: number;
     currentPage: number;
@@ -68,7 +62,6 @@ export interface Service {
     name: string;
     price: string;
     description: string;
-    deleted: boolean;
 }
 export interface Examination {
     id: number;
@@ -82,4 +75,34 @@ export interface PapeExaminationResponse {
     totalPage: number;
     examinations: Examination[];
     appointment: Appointment;
+}
+
+export interface Employee {
+    id: number;
+
+    name: string;
+
+    role: string;
+
+    email: string;
+
+    phone: string;
+}
+export interface PageEmployeeResponse {
+    currentPage: number;
+    totalPage: number;
+    employees: Employee[];
+}
+
+export interface EmployeeDetail {
+    email: string;
+    name: string;
+    dob: string;
+    address: string;
+    phoneNo: string;
+    gender: boolean;
+    nationalId: string;
+    role: string;
+    qualification: string;
+    experience: string;
 }

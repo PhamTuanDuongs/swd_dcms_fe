@@ -8,10 +8,11 @@ import { Form, useActionData, useNavigate, useSubmit } from "@remix-run/react";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
 
-import { createEmployee, getUserByEmail, getUserByNationalID } from "../../services/medstaff";
+import { createEmployee } from "../../services/medstaff";
 
 import ToastFail from "~/components/toastfail";
 import ToastDemo from "~/components/toatsdemo";
+import { EmployeeDetail } from "~/types";
 
 const ZEmployeeInput = z.object({
     name: z
@@ -78,7 +79,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
                 .string()
                 .nonempty()
                 .max(62)
-                .regex(/^[a-zA-Z ]+$/),
+                .regex(/^[a-zA-Z ]+$/)
         ),
         address: zfd.text(z.string().nonempty().max(126)),
         dob: zfd.text(z.coerce.date().max(new Date())),
@@ -94,38 +95,22 @@ export async function action({ request, context }: ActionFunctionArgs) {
         experience: zfd.text(z.string().nonempty().max(510)),
     });
 
-    const user = {
-        userDTO: {
-            email: email,
-            metadata: {
-                name: name,
-                dob: dob,
-                address: address,
-                phoneNo: phoneNo,
-                gender: gender == "1",
-                nationalId: nationalID,
-            },
-            role: {
-                id: role == "Nurse" ? 2 : role == "Doctor" ? 3 : 4,
-                roleName: role,
-            },
-        },
-
+    const employeeDetail = {
+        email: email,
+        name: name,
+        dob: dob,
+        address: address,
+        phoneNo: phoneNo,
+        gender: gender == "1",
+        nationalId: nationalID,
+        role: role,
         qualification: qualification,
         experience: experience,
     };
     try {
         ZEmployeeInput.parse(data);
 
-        const emailExists = await getUserByEmail(context, email);
-        if (emailExists) {
-            return json({ status: "401", message: "This email has exited!" });
-        }
-        const nationalIdExists = await getUserByNationalID(context, nationalID);
-        if (nationalIdExists) {
-            return json({ status: "400", message: "This nationalID has exited!" });
-        }
-        await createEmployee(user, context);
+        await createEmployee(employeeDetail as EmployeeDetail, context);
         return json({ status: "200", message: "Added succesfully" });
     } catch (error: any) {
         return json({ status: "500", message: "Server error" });

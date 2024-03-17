@@ -4,7 +4,8 @@ import { Table } from "flowbite-react";
 import DeleteButton from "./deleteemployee";
 
 import type { Medstaff } from "~/types/medstaff";
-export const EmployeeTable = ({ employees, currentPage }: { employees: Medstaff[]; currentPage: number }) => {
+import { Employee } from "~/types";
+export const EmployeeTable = ({ employees, currentPage }: { employees: Employee[]; currentPage: number }) => {
     return (
         // <div>
         //     <table className="m-0 min-w-full divide-y divide-gray-200 dark:divide-gray-700 sm:rounded-lg">
@@ -93,7 +94,7 @@ export const EmployeeTable = ({ employees, currentPage }: { employees: Medstaff[
 
                             <Table.Body className="divide-y">
                                 {employees.map((employee, i) => (
-                                    <TableRow key={employee.userDTO.id} employee={employee} no={i + 1 + currentPage * 10} />
+                                    <TableRow key={employee.id} employee={employee} no={i + 1 + currentPage * 10} />
                                 ))}
                             </Table.Body>
                         </Table>
@@ -104,36 +105,36 @@ export const EmployeeTable = ({ employees, currentPage }: { employees: Medstaff[
     );
 };
 
-const TableRow = ({ employee, no }: { employee: Medstaff; no: number }) => (
-    <Table.Row key={employee.userDTO.id} className="bg-white hover:bg-gray-50 dark:hover:bg-gray-600">
+const TableRow = ({ employee, no }: { employee: Employee; no: number }) => (
+    <Table.Row key={employee.id} className="bg-white hover:bg-gray-50 dark:hover:bg-gray-600">
         <Table.Cell className="px-2 py-3 whitespace-nowrap text-center text-sm font-medium text-gray-900 dark:text-white">{no}</Table.Cell>
 
         <Table.Cell className="px-2 py-3 text-sm font-medium text-gray-900 dark:text-white">
-            <div className="line-clamp-2 whitespace-normal">{employee.userDTO.metadata.name}</div>
+            <div className="line-clamp-2 whitespace-normal">{employee.name}</div>
         </Table.Cell>
 
         <Table.Cell className="px-2 py-3  text-sm text-gray-500 dark:text-gray-400">
-            <div className="line-clamp-2 whitespace-normal">{employee.userDTO.role.name}</div>
+            <div className="line-clamp-2 whitespace-normal">{employee.role}</div>
         </Table.Cell>
 
-        <Table.Cell className="px-2 py-3  text-sm text-gray-500 whitespace-nowrap">{employee.userDTO?.email}</Table.Cell>
-        <Table.Cell className="px-2 py-3  text-sm text-gray-500 whitespace-nowrap">{employee.userDTO.metadata.phoneNo}</Table.Cell>
+        <Table.Cell className="px-2 py-3  text-sm text-gray-500 whitespace-nowrap">{employee.email}</Table.Cell>
+        <Table.Cell className="px-2 py-3  text-sm text-gray-500 whitespace-nowrap">{employee.phone}</Table.Cell>
 
         <Table.Cell className="px-2 py-3  text-sm font-medium text-center whitespace-nowrap flex justify-between">
             <Link
-                to={"/employees/update?id=" + employee.userDTO.id}
+                to={"/employees/update?id=" + employee.id}
                 className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-600 pl-3"
             >
                 Update
             </Link>
 
             <Link
-                to={"/employees/view?id=" + employee.userDTO.id}
+                to={"/employees/view?id=" + employee.id}
                 className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-600 pl-3"
             >
                 View
             </Link>
-            <DeleteButton employeeId={employee.userDTO.id} />
+            <DeleteButton employeeId={employee.id} />
         </Table.Cell>
     </Table.Row>
 );

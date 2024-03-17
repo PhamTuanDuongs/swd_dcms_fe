@@ -2,7 +2,7 @@ import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
 
 import { getServiceById } from "~/services/service";
-import type { Service } from "~/types";
+import type { Service } from "~/types/service";
 export async function loader({ params, context }: LoaderFunctionArgs) {
     if (typeof params?.id !== "undefined") {
         const service = await getServiceById(context, params?.id);
