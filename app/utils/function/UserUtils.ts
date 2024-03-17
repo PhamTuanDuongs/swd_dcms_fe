@@ -34,7 +34,7 @@ export async function requireUser(request: Request) {
 export async function requireAdmin(request: Request) {
     const user = await requireUser(request);
 
-    if (user.role.roleName.toLocaleLowerCase() !== "admin") {
+    if (user.role.roleName.toLowerCase() !== "admin") {
         throw redirect("/");
     }
 

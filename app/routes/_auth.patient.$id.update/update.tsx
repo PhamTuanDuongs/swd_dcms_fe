@@ -35,6 +35,7 @@ const Zpatient = z.object({
         .regex(/^\d+$/, { message: "Invalid national ID!" }),
     oldNationalId: z.string(),
 });
+
 export default function UpdatePatient({ patient, data }: PropsType) {
     const [gender, setGender] = useState(patient.gender);
     const handleGenderChange = (e: any) => {

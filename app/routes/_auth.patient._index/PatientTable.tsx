@@ -1,8 +1,9 @@
 import { Link } from "@remix-run/react";
 import { Table } from "flowbite-react";
 
-import type { User } from "~/types";
-export const PatientTable = ({ patients, currentPage }: { patients: User[]; currentPage: number }) => {
+import type { Metadata } from "~/types";
+
+export const PatientTable = ({ patients, currentPage }: { patients: Metadata[]; currentPage: number }) => {
     return (
         <div className="flex flex-col">
             <div className="my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -43,31 +44,31 @@ export const PatientTable = ({ patients, currentPage }: { patients: User[]; curr
     );
 };
 
-const TableRow = ({ patient, no }: { patient: User; no: number }) => (
+const TableRow = ({ patient, no }: { patient: Metadata; no: number }) => (
     <Table.Row key={no} className="bg-white hover:bg-gray-50 dark:hover:bg-gray-600">
         <Table.Cell className="px-2 py-3 whitespace-nowrap text-center text-sm font-medium text-gray-900 dark:text-white">{no}</Table.Cell>
 
         <Table.Cell className="px-2 py-3 text-sm font-medium text-gray-900 dark:text-white">
-            <div className="line-clamp-2 whitespace-normal">{patient.metadata.name}</div>
+            <div className="line-clamp-2 whitespace-normal">{patient.name}</div>
         </Table.Cell>
 
         <Table.Cell className="px-2 py-3  text-sm text-gray-500 dark:text-gray-400">
-            <div className="line-clamp-2 whitespace-normal">{patient.metadata.nationalId}</div>
+            <div className="line-clamp-2 whitespace-normal">{patient.nationalId}</div>
         </Table.Cell>
 
-        <Table.Cell className="px-2 py-3  text-sm text-gray-500 whitespace-nowrap">{patient.metadata.dob}</Table.Cell>
-        <Table.Cell className="px-2 py-3  text-sm text-gray-500 whitespace-nowrap">{patient.metadata.phoneNo}</Table.Cell>
+        <Table.Cell className="px-2 py-3  text-sm text-gray-500 whitespace-nowrap">{patient.dob}</Table.Cell>
+        <Table.Cell className="px-2 py-3  text-sm text-gray-500 whitespace-nowrap">{patient.phoneNo}</Table.Cell>
 
         <Table.Cell className="px-2 py-3  text-sm font-medium text-center whitespace-nowrap flex justify-between">
             <Link
-                to={"/patient/" + patient.metadata.id + "/update"}
+                to={"/patient/" + patient.id + "/update"}
                 className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-600 pl-3"
             >
                 Update
             </Link>
 
             <Link
-                to={"/patient/" + patient.metadata.id + "/view"}
+                to={"/patient/" + patient.id + "/view"}
                 className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-600 pl-3"
             >
                 View

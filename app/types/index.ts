@@ -1,3 +1,4 @@
+import { PageResponse } from "./common";
 import { Appointment } from "./appointment";
 
 export interface User {
@@ -30,7 +31,7 @@ export interface Metadata {
 
 export interface Role {
     id: number;
-    name: string;
+    roleName: string;
 }
 
 export interface Avatar {
@@ -52,11 +53,8 @@ export interface MedstaffMetadata {
     experience: string;
 }
 
-export interface PagePatientResponse {
-    totalPages: number;
-    currentPage: number;
-    patients: User[];
-}
+export type PagePatientResponse = PageResponse<User>;
+
 export interface Service {
     id: number;
     name: string;

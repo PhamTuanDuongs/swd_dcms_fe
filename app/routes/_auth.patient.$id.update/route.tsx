@@ -25,7 +25,6 @@ const ZUserMetadata = zfd.formData({
     phoneNo: zfd.text(z.string().nonempty().max(30).regex(/^\d+$/)),
     gender: zfd.text().transform((val) => val == "true"),
     nationalId: zfd.text(z.string().nonempty().max(30).regex(/^\d+$/)),
-    oldNationalId: zfd.text(z.string().nonempty()),
 });
 
 export async function loader({ context, request, params }: LoaderFunctionArgs) {
@@ -33,12 +32,16 @@ export async function loader({ context, request, params }: LoaderFunctionArgs) {
     const id = params?.id;
 
     try {
-        const patient = await getPatientById(id, context);
-        if (patient == undefined) throw new Response("Patient not found", { status: 403, statusText: "Internal server error" });
+        const patient = await getPatientById(parseInt(id ?? ""), context);
+
+        if (patient == undefined) throw new Response("Patient not found", { status: 404 });
+
         return json({
             patient,
         });
     } catch (error) {
+        console.error(error);
+
         throw new Response("Internal server error", { status: 500, statusText: "Internal server error" });
     }
 }
@@ -48,7 +51,7 @@ export const action: ActionFunction = async ({ context, request, params }) => {
 
     try {
         const userMetadata = ZUserMetadata.parse(await request.formData());
-        const { name, dob, address, phoneNo, gender, nationalId, oldNationalId } = userMetadata;
+        const { name, dob, address, phoneNo, gender, nationalId } = userMetadata;
         const patientInfo = {
             id: id,
             name,
@@ -58,11 +61,9 @@ export const action: ActionFunction = async ({ context, request, params }) => {
             gender,
             nationalId,
         };
-        const nationalIdExists = await getUserByNationalID(context, nationalId);
-        if (nationalIdExists && oldNationalId != nationalId) {
-            return json({ status: 400, message: "This identification number has exited!" });
-        }
+
         await updatePatient(context, patientInfo);
+
         return json({
             message: "Update successfully",
         });
@@ -72,6 +73,7 @@ export const action: ActionFunction = async ({ context, request, params }) => {
                 message: ("Updates failed:" + JSON.stringify(error.issues)) as string,
             });
         }
+
         return json(
             {
                 message: ("Update failed: " + JSON.stringify(error)) as string,
@@ -88,8 +90,8 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Update() {
-    const data = useLoaderData<typeof loader>();
-    const patient = data.patient as Metadata;
+    const { patient } = useLoaderData<typeof loader>();
+
     const status = useActionData<typeof action>();
     const [open, setOpen] = React.useState(false);
     const eventDateRef = React.useRef(new Date());
@@ -116,7 +118,7 @@ export default function Update() {
             }
             timeoutId = setTimeout(() => {
                 navigate("/patient");
-            }, 10000);
+            }, 3000);
         }
     }, [status]);
 

@@ -1,5 +1,5 @@
 import { json, type LoaderFunctionArgs } from "@remix-run/cloudflare";
-import { Form, Link, type ShouldRevalidateFunction, useLoaderData, useNavigate } from "@remix-run/react";
+import { Form, Link, useLoaderData, useNavigate } from "@remix-run/react";
 import { Pagination } from "flowbite-react";
 import { HTTPError } from "ky";
 
@@ -7,18 +7,18 @@ import { findAllByNationalId } from "../../services/patient";
 
 import { PatientTable } from "./PatientTable";
 
-import { Select } from "~/components/Select";
 import { requireAdmin } from "~/utils/function/UserUtils";
 
 export async function loader({ context, request }: LoaderFunctionArgs) {
     await requireAdmin(request);
+
     const url = new URL(request.url);
     const nationalId = url.searchParams.get("nationalId") ?? "";
     const status = url.searchParams.get("status") ?? "all";
     const pageNo = url.searchParams.get("pageNo") ?? "1";
 
     try {
-        const pagePatient = await findAllByNationalId(context, parseInt(pageNo), nationalId, status);
+        const pagePatient = await findAllByNationalId(context, parseInt(pageNo), nationalId);
 
         return json({
             ...pagePatient,
@@ -31,9 +31,8 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
                 return json({
                     currentPage: 0,
                     totalPages: 0,
-                    patients: [],
+                    data: [],
                     nationalId,
-                    status,
                 });
             }
 
@@ -41,7 +40,7 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
                 JSON.stringify({
                     error: error?.message,
                 }),
-                { status: error?.response?.status ?? 500 },
+                { status: error?.response?.status ?? 500 }
             );
         }
 
@@ -49,23 +48,13 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
             JSON.stringify({
                 error: "Unknown error",
             }),
-            { status: 500 },
+            { status: 500 }
         );
     }
 }
 
-export const shouldValidate: ShouldRevalidateFunction = ({ actionResult, currentUrl, defaultShouldRevalidate }) => {
-    return true;
-};
-
-const statusOptions = [
-    { value: "all", text: "All" },
-    { value: "register", text: "Registered" },
-    { value: "unregister", text: "Unregistered" },
-];
-
 export default function List() {
-    const { patients, currentPage, totalPages, nationalId, status } = useLoaderData<typeof loader>();
+    const { data, currentPage, totalPages, nationalId } = useLoaderData<typeof loader>();
     const navigate = useNavigate();
 
     return (
@@ -74,14 +63,6 @@ export default function List() {
 
             <div className="mt-4">
                 <Form method="GET" className="flex gap-5">
-                    <fieldset className="flex flex-col gap-1">
-                        <label className="text-md font-medium text-gray-900 dark:text-white" htmlFor="role">
-                            Register status
-                        </label>
-
-                        <Select name="status" width="w-40" defaultValue={status} options={statusOptions} />
-                    </fieldset>
-
                     <div className="flex flex-col gap-1">
                         <label className="text-md font-medium text-gray-900 dark:text-white" htmlFor="name">
                             Identification Number
@@ -112,8 +93,8 @@ export default function List() {
 
                 <div className="mt-8">
                     <div className="justify-center text-center"></div>
-                    {patients?.length > 0 ? (
-                        <PatientTable patients={patients} currentPage={currentPage} />
+                    {data?.length > 0 ? (
+                        <PatientTable patients={data} currentPage={currentPage} />
                     ) : (
                         <div className="flex items-center justify-center h-48">
                             <p className="text-lg font-medium text-gray-900 dark:text-white">No patients found</p>
@@ -125,7 +106,7 @@ export default function List() {
                     <Pagination
                         showIcons
                         currentPage={currentPage}
-                        onPageChange={(page) => navigate(`.?pageNo=${page}&nationalId=${nationalId}&status=${status}`)}
+                        onPageChange={(page) => navigate(`.?pageNo=${page}&nationalId=${nationalId}`)}
                         totalPages={totalPages}
                     />
                 )}

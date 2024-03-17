@@ -21,6 +21,8 @@ export async function action({ request, context }: ActionFunctionArgs) {
 
         return json({ status: "200", message: "Login succesfully" }, { headers: { "Set-Cookie": await userCookie.serialize(loggedUser) } });
     } catch (error) {
+        console.log(error);
+
         if (error instanceof HTTPError) {
             switch (error?.response?.status) {
                 case 400:
